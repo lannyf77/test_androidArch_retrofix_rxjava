@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="descriptionColor" format="color" />
+    <attr name="commentsColor" format="color" />
+    <attr name="timeColor" format="color" />
+</resources>

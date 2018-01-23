@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="wrap_content"
+                                             android:layout_height="wrap_content"
+                                             android:orientation="horizontal"
+                                             android:padding="5dip"
+                                             android:id="@+id/relativeLayout">
+
+    <!-- Left Thumbnail image -->
+
+    <ImageView
+        android:id="@+id/img_thumbnail"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+    />
+
+    <!-- Description -->
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#040404"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        tools:text="This should be a long description like this example that I'm showing."
+        app:layout_constraintTop_toTopOf="@+id/img_thumbnail"
+        app:layout_constraintLeft_toRightOf="@+id/img_thumbnail"
+        android:layout_marginLeft="5dp"/>
+
+    <!-- Author -->
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#040404"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"
+        tools:text="Author 123"
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintLeft_toLeftOf="@+id/description"/>
+
+    <!-- Comments -->
+
+    <TextView
+        android:id="@+id/comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textColor="#10bcc9"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        tools:ignore="SmallSp"
+        tools:text="30012 comments"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintEnd_toEndOf="@+id/author"
+        app:layout_constraintRight_toRightOf="@+id/author"/>
+
+    <!-- Time -->
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#343434"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"
+        tools:text="12 hours ago"
+        app:layout_constraintStart_toStartOf="@+id/author"
+        app:layout_constraintTop_toBottomOf="@+id/author"
+        app:layout_constraintLeft_toLeftOf="@+id/author"/>
+
+    <!-- snippet -->
+    <TextView
+        android:id="@+id/snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="0dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:paddingBottom="0dp"
+        android:textColor="#040404"
+
+        android:textSize="15sp"
+        android:typeface="sans"
+        app:layout_constraintTop_toBottomOf="@+id/time"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <!-- categories -->
+    <TextView
+        android:id="@+id/categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#040404"
+        android:textSize="15sp"
+        android:typeface="sans"
+
+        android:text="eee888"
+        android:gravity="right"
+
+
+        tools:paddingTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/snippet"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

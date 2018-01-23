@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ AOL CONFIDENTIAL
+  ~
+  ~ Copyright 2015 and beyond AOL Inc. All Rights Reserved.
+  ~
+  ~ This software contains valuable confidential and proprietary information
+  ~ of AOL Inc. and is subject to applicable licensing agreements.
+  ~ Unauthorized reproduction, transmission or distribution of this file and
+  ~ its contents is a violation of applicable laws.
+  -->
+
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:interpolator="@anim/decelerate_interpolator">
+
+    <translate
+        android:duration="800"
+        android:fromXDelta="100%"
+        android:toXDelta="0%"/>
+
+</set>

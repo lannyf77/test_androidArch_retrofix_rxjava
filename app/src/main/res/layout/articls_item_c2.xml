@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/relativeLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="0dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6sp"
+    android:layout_marginStart="6dp"
+
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal"
+    android:paddingBottom="0dip"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingTop="5dp"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp"
+>
+
+    <!-- Left Thumbnail image -->
+
+    <ImageView
+        android:id="@+id/img_thumbnail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:padding="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Description -->
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:textColor="?attr/descriptionColor"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_thumbnail"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="eeeeeeeeeeeee 8888888888888 This should be a long description like this example that I'm showing."/>
+
+    <!-- Author -->
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginTop="3dp"
+        android:textColor="?attr/descriptionColor"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        tools:ignore="SmallSp"
+        tools:text="Author 123"/>
+
+    <!-- Comments -->
+
+    <TextView
+        android:id="@+id/comments"
+        android:layout_width="0dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="right"
+        android:textColor="?attr/commentsColor"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/description"
+        app:layout_constraintStart_toEndOf="@+id/author"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        tools:ignore="SmallSp"
+        tools:text="30012 comments"/>
+
+    <!-- Time -->
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="3dp"
+        android:textColor="?attr/timeColor"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/description"
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/author" tools:ignore="SmallSp"
+        tools:text="12 hours ago"/>
+
+    <!-- snippet -->
+    <TextView
+        android:id="@+id/snippet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:paddingBottom="0dp"
+        android:text='Create a new layout. To start a new constraint layout file, follow these steps: In the Project window, click the module folder and then select File > New > XML > Layout XML. Enter a name for the layout file and enter "android.support.constraint.ConstraintLayout" for the Root Tag.'
+        android:textColor="?attr/descriptionColor"
+        android:textSize="15sp"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="@+id/description"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/time"
+
+    />
+
+    <!-- categories -->
+    <TextView
+        android:id="@+id/categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="3dp"
+
+        android:ellipsize="end"
+        android:gravity="left"
+
+
+        android:maxLines="1"
+        android:text="eee888"
+        android:textColor="?attr/descriptionColor"
+        android:textSize="15sp"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/snippet"
+
+        tools:paddingTop="0dp"
+
+        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
+
+</android.support.constraint.ConstraintLayout>
