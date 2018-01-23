@@ -219,15 +219,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         }
 
         if (list != null) {
-
-            //Log.w("eee888", "+++ +++ %%% addPostsToRecycleViewData(), 111 list.size: ${list.size}, bf articles_list.layoutManager.itemCount: ${articles_list.layoutManager.itemCount}")
-
-
             (articles_list.adapter as RecycleViewDataAdapter).addArticls(list)
-
-
-            //Log.w("eee888", "+++ +++ %%% addPostsToRecycleViewData(), 222 list.size: ${list.size}, bf articles_list.layoutManager.itemCount: ${articles_list.layoutManager.itemCount}")
-
         } else {
             //Log.e("eee888-observeViewModel", "+++ +++ %%% !!! datalist==null")
         }
