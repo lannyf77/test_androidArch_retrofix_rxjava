@@ -5,6 +5,9 @@ buildscript {
         verAndroidSupport = '26.0.1'
         arch = "1.0.0-alpha1"
         archRoomVersion = "1.0.0-alpha1"
+
+        daggerVersion = '2.11'
+
         ext.anko_version = '0.10.1'
     }
     ext.kotlin_version = '1.2.20'

@@ -29,7 +29,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel
 //import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.news_fragment.*
 import com.example.linma9.mytechcruncharticlelistapplication.commons.extensions.adapterInterfaces.ViewTypeConstants
-import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
+
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.BundleAwareViewModelFactory
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
@@ -78,7 +78,8 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
             infiniteScrollListener = InfiniteScrollListener(
                     {
-                        Presentor.instance.pullDataFromRemoteServer()
+                        MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                        //Presentor.instance.pullDataFromRemoteServer()
                     },
                     linearLayout)
 
@@ -211,7 +212,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 5) {
                     //Log.d("tag", "+++ +++ %%% @@@ addPostsToRecycleViewData(), call pullDataFromRemoteServer(), currentAuthorFilterId: $currentAuthorFilterId")
 
-                    Presentor.instance.pullDataFromRemoteServer()
+                    MyApp.graph.getPresenter().pullDataFromRemoteServer()
+
+                    //Presentor.instance.pullDataFromRemoteServer()
                 }
             }
         } else {
@@ -246,7 +249,8 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 10) {
                     //Log.d("tag", "+++ +++ %%% @@@ resetPostFilter(): currentAuthorFilterId: $currentAuthorFilterId")
 
-                    Presentor.instance.pullDataFromRemoteServer()
+                    MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                    //Presentor.instance.pullDataFromRemoteServer()
                 }
 
                 infiniteScrollListener!!.reset()
@@ -293,7 +297,10 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                     infiniteScrollListener!!.reset()
 
                     if (list.size < 10) {
-                        Presentor.instance.pullDataFromRemoteServer()
+
+                        MyApp.graph.getPresenter().pullDataFromRemoteServer()
+
+                        //Presentor.instance.pullDataFromRemoteServer()
                     }
 
                     //Log.w("eee888", "+++ +++ %%% 111 onSelectedCategory(), list.size: ${list.size}, bf articles_list.layoutManager.itemCount: ${articles_list.layoutManager.itemCount}")
