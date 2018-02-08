@@ -1,6 +1,7 @@
 package com.example.linma9.mytechcruncharticlelistapplication.presentor
 
 import android.arch.lifecycle.MutableLiveData
+import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
 
@@ -21,10 +22,12 @@ class Presentor {
     }
 
     public fun pullDataFromRemoteServer() {
-        DataRepository.instance.pullDataFromRemoteServer()
+        MyApp.graph.getDataRepository().pullDataFromRemoteServer()
+        //DataRepository.instance.pullDataFromRemoteServer()
     }
 
     public fun getDataList(): MutableLiveData<List<CTViewDataItem>> {
-        return DataRepository.instance.getDataList()
+        return MyApp.graph.getDataRepository().getDataList()
+        //return DataRepository.instance.getDataList()
     }
 }

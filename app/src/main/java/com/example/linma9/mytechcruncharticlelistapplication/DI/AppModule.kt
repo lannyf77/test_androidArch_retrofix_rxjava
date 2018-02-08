@@ -3,6 +3,7 @@ package com.example.linma9.mytechcruncharticlelistapplication.DI
 import android.app.Application
 import android.content.Context
 import android.location.LocationManager
+import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import dagger.Module
 import dagger.Provides
@@ -20,7 +21,11 @@ class AppModule (private val app: Application){
 
     @Provides
     @Singleton
-    fun providePresentor() : Presentor = Presentor.instance
+    fun presentor() : Presentor = Presentor.instance
+
+    @Provides
+    @Singleton
+    fun dataRepository() : DataRepository = DataRepository.instance
 
     @Provides
     @Singleton

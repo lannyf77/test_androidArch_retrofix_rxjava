@@ -16,4 +16,5 @@ interface AppComponent {
     fun inject(application: MyApp)
 
     fun getPresenter(): Presentor
+    fun getDataRepository(): DataRepository
 }

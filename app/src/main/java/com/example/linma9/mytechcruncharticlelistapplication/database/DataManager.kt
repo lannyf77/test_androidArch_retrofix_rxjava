@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.text.TextUtils
 import android.util.Log
+import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.database.DatabaseUtils.DatabaseInitializer
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.Author
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.Category
@@ -107,7 +108,9 @@ class DataManager {
         //Log.w("eee888", "+++ +++ @@@ ((())) in doSubscribeToDbPostChanges postList: " + postList?.size+"\nauthorList:"+authorList?.size +", thread:"+Thread.currentThread().getId())
 
         if (postList == null || postList.size < 10) {
-            DataRepository.instance.buildCTListObservable()
+
+            MyApp.graph.getDataRepository().buildCTListObservable()
+            //DataRepository.instance.buildCTListObservable()
         }
 
         if (postList != null) {
@@ -143,8 +146,10 @@ class DataManager {
 
             var author: Author = copyToAuthor(dbAuthor)
 
-            val tcData = DataRepository.instance.buildOneTCData(author, postId, authorName, avatarUrl, title, dateStr, excerpt, url,
+            val tcData = MyApp.graph.getDataRepository().buildOneTCData(author, postId, authorName, avatarUrl, title, dateStr, excerpt, url,
                     categories)
+//            val tcData = DataRepository.instance.buildOneTCData(author, postId, authorName, avatarUrl, title, dateStr, excerpt, url,
+//                    categories)
             convertedPosts.add(tcData)
         }
 
@@ -160,7 +165,8 @@ class DataManager {
         //Log.w("eee888", "+++ +++ @@@ ((())) in getTCPostDataFromDatabase postList: " + postList?.size+"\nauthorList:"+authorList?.size +", thread:"+Thread.currentThread().getId())
 
         if (postList == null || postList.size < 10) {
-            DataRepository.instance.buildCTListObservable()
+            MyApp.graph.getDataRepository().buildCTListObservable()
+            //DataRepository.instance.buildCTListObservable()
         }
 
         if (postList != null) {
@@ -239,7 +245,8 @@ class DataManager {
         mDb!!.authModel().deleteAll()
         mDb!!.postModel().deleteAll()
 
-        DataRepository.instance.pullDataFromRemoteServer()
+        MyApp.graph.getDataRepository().pullDataFromRemoteServer()
+        //DataRepository.instance.pullDataFromRemoteServer()
     }
 
 
