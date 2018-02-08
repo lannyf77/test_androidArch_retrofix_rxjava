@@ -20,7 +20,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import com.example.linma9.mytechcruncharticlelistapplication.database.DataManager
-import com.example.linma9.mytechcruncharticlelistapplication.model.service.NetworkUtils
+
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
@@ -231,7 +231,8 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     }
 
     fun initSession() {
-        NetworkUtils.instance!!.init()
+        MyApp.graph.getNetworkUtils().init()
+        //NetworkUtils.instance!!.init()
         DataManager.instance!!.registerEvtBus()
     }
 

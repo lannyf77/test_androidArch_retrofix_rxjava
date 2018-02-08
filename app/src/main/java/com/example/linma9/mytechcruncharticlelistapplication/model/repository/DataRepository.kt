@@ -2,9 +2,10 @@ package com.example.linma9.mytechcruncharticlelistapplication.model.repository
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.database.DataManager
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.*
-import com.example.linma9.mytechcruncharticlelistapplication.model.service.NetworkUtils
+
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 import com.google.gson.Gson
@@ -16,6 +17,8 @@ import okhttp3.Response
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by linma9 on 1/23/18.
@@ -28,12 +31,22 @@ import java.util.*
     after the MutableLiveData is udated it will notify its observer
  */
 
-class DataRepository private constructor() {
+@Singleton
+class DataRepository @Inject constructor() {
+//    class DataRepository @Inject private constructor() {
 
     var mCTListObservable: MutableLiveData<List<CTViewDataItem>> = MutableLiveData()
 
     init {
         //Log.d("eee888","+++ +++ DataRepository:init()"+"\nthread:"+Thread.currentThread().getId())
+
+        /**
+         * if using @Singleton & @Inject constructor(), then the dagger will provide the singleton
+         * so set the dataRepository
+         */
+        if (dataRepository == null) {
+            dataRepository = this
+        }
 
         // If any transformation is needed, this can be simply done by Transformations class ...
         //buildCTListObservable()
@@ -52,6 +65,10 @@ class DataRepository private constructor() {
 
     }
 
+    /**
+     * if using @Singleton & @Inject constructor(), then the dagger will provide the singleton
+     * so no place should use DataRepository.instance to get this
+     */
     companion object {
         private var dataRepository: DataRepository? = null
         val instance: DataRepository
@@ -75,7 +92,7 @@ class DataRepository private constructor() {
         disposeable?.dispose()
         disposeable = null
 
-        val okHtppUtil = NetworkUtils.instance
+        val okHtppUtil = MyApp.graph.getNetworkUtils()  //NetworkUtils.instance
         okHtppUtil.getPostsFromWorldPressTCWithRx(object : Observer<Posts> {
             override fun onNext(posts: Posts) {
 
@@ -106,7 +123,7 @@ class DataRepository private constructor() {
         }
 
         val gson = Gson()
-        val okHtppUtil = NetworkUtils.instance
+        val okHtppUtil = MyApp.graph.getNetworkUtils()  //NetworkUtils.instance
 
         //Log.w("eee888-testWCGson", "+++ +++ @@@ pullDataFromRemoteServer(), call okHtppUtil.getPostsFromWorldPressTC()")
 

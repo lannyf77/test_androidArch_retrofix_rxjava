@@ -23,9 +23,14 @@ class AppModule (private val app: Application){
     @Singleton
     fun presentor() : Presentor = Presentor.instance
 
-    @Provides
-    @Singleton
-    fun dataRepository() : DataRepository = DataRepository.instance
+    /**
+     * @Singleton
+     class DataRepository @Inject constructor()
+     to avoid the using of provide which specifically call DataRepository.instance to instantiate the DataRepository
+     */
+//    @Provides
+//    @Singleton
+//    fun dataRepository() : DataRepository = DataRepository.instance
 
     @Provides
     @Singleton

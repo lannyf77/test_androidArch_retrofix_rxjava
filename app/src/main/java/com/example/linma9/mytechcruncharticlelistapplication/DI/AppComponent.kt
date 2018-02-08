@@ -2,6 +2,7 @@ package com.example.linma9.mytechcruncharticlelistapplication.DI
 
 import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
+import com.example.linma9.mytechcruncharticlelistapplication.model.service.NetworkUtils
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import dagger.Component
 import javax.inject.Singleton
@@ -11,10 +12,11 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class))
+@Component(modules = arrayOf(AppModule::class, NetworkModule::class))
 interface AppComponent {
     fun inject(application: MyApp)
 
     fun getPresenter(): Presentor
     fun getDataRepository(): DataRepository
+    fun getNetworkUtils(): NetworkUtils
 }

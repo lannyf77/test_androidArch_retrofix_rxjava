@@ -11,7 +11,6 @@ import com.example.linma9.mytechcruncharticlelistapplication.model.data.Category
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.Post
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.Posts
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
-import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 

@@ -2,6 +2,7 @@ package com.example.linma9.mytechcruncharticlelistapplication
 
 import android.app.Application
 import android.location.LocationManager
+import android.util.Log
 import com.example.linma9.mytechcruncharticlelistapplication.DI.AppComponent
 import com.example.linma9.mytechcruncharticlelistapplication.DI.AppModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.DaggerAppComponent
@@ -14,24 +15,25 @@ import javax.inject.Inject
 class MyApp : Application() {
 
     companion object {
-        //platformStatic allow access it from java code
+        //allow access it from app
         @JvmStatic lateinit var graph: AppComponent
     }
 
     @Inject
     lateinit var locationManager: LocationManager
 
-//    @Inject
-//    lateinit var presentor: Presentor
-
     override fun onCreate() {
         super.onCreate()
-        graph = DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .build()
+        graph = initDagger()
         graph.inject(this)
 
-        println("App: $locationManager")
+        Log.d("MyApp", "App test the : $locationManager instance")
         //TODO do some other cool stuff here
+    }
+
+    private fun initDagger() : AppComponent {
+        return DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
     }
 }
