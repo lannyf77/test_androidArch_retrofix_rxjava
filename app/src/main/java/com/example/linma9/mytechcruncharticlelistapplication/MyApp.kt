@@ -23,7 +23,7 @@ class MyApp : Application() {
         //allow access it from app
         @JvmStatic lateinit var graph: AppComponent
         @JvmStatic lateinit var dataMgrComponenet: DataMgrComponent
-        @JvmStatic lateinit var presentorComponenet: PresentorComponent
+        //@JvmStatic lateinit var presentorComponenet: PresentorComponent
     }
 
     @Inject
@@ -35,7 +35,8 @@ class MyApp : Application() {
         graph.inject(this)
 
         dataMgrComponenet = graph.addChildModle(DataManagerModule(this))
-        presentorComponenet = graph.addChildModle(PresentorModule())
+
+        //presentorComponenet = graph.addChildModle(PresentorModule())
 
         Log.d("MyApp", "App test the : $locationManager instance")
         //TODO do some other cool stuff here

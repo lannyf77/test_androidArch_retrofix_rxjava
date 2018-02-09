@@ -21,6 +21,8 @@ import android.widget.Toast
 import com.example.linma9.mytechcruncharticlelistapplication.InfiniteScrollListener
 import com.example.linma9.mykotlinapplication2.features.news.adapter.ArticleDelegateAdapter
 import com.example.linma9.mykotlinapplication2.features.news.adapter.RecycleViewDataAdapter
+import com.example.linma9.mytechcruncharticlelistapplication.DI.componenet.PresentorComponent
+import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
 import com.example.linma9.mytechcruncharticlelistapplication.commons.extensions.inflate
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
@@ -29,11 +31,13 @@ import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel
 //import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.news_fragment.*
 import com.example.linma9.mytechcruncharticlelistapplication.commons.extensions.adapterInterfaces.ViewTypeConstants
+import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.BundleAwareViewModelFactory
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
 import java.util.*
+import javax.inject.Inject
 
 
 //import kotlinx.android.synthetic.main.news_fragment.*  // with this it could directly access news_list, witout: findViewById<RecyclerView>(R.id.news_list)
@@ -58,9 +62,22 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
     private var articlesList: RecyclerView? = null
 
+    //private lateinit var presentorComponenet: PresentorComponent
+
+    @Inject
+    lateinit var presentor: Presentor
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container?.inflate(R.layout.news_fragment)
         articlesList = view!!.findViewById<RecyclerView>(R.id.articles_list)
+
+
+        //use dagger to inject viewScope presentor
+        if (MyApp.graph != null) {
+            MyApp.graph.addChildModle(PresentorModule()).inject(this)
+        }
+
+
         return view
     }
 
@@ -78,7 +95,8 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
             infiniteScrollListener = InfiniteScrollListener(
                     {
-                        MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+                        presentor.pullDataFromRemoteServer()
+                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
                         //Presentor.instance.pullDataFromRemoteServer()
                     },
                     linearLayout)
@@ -170,7 +188,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         and add to the ui's list adapter
          */
 
-        listDataViewModel!!.subscribeToDbPostChanges(true)
+        listDataViewModel!!.subscribeToDbPostChanges(true, presentor)
         val observableData: MutableLiveData<List<CTViewDataItem>> = listDataViewModel!!.getListDataObservable()
         observableData.observe(this, object : Observer<List<CTViewDataItem>> {
             override fun onChanged(datalist: List<CTViewDataItem>?) {
@@ -212,7 +230,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 5) {
                     //Log.d("tag", "+++ +++ %%% @@@ addPostsToRecycleViewData(), call pullDataFromRemoteServer(), currentAuthorFilterId: $currentAuthorFilterId")
 
-                    MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+                    presentor.pullDataFromRemoteServer()
+
+                    //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
 
                     //Presentor.instance.pullDataFromRemoteServer()
                 }
@@ -249,7 +269,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 10) {
                     //Log.d("tag", "+++ +++ %%% @@@ resetPostFilter(): currentAuthorFilterId: $currentAuthorFilterId")
 
-                    MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+                    presentor.pullDataFromRemoteServer()
+
+                    //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
                     //Presentor.instance.pullDataFromRemoteServer()
                 }
 
@@ -298,7 +320,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
                     if (list.size < 10) {
 
-                        MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+                        presentor.pullDataFromRemoteServer()
+
+                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
 
                         //Presentor.instance.pullDataFromRemoteServer()
                     }

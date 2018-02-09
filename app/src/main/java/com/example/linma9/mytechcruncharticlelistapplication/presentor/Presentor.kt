@@ -1,6 +1,7 @@
 package com.example.linma9.mytechcruncharticlelistapplication.presentor
 
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
@@ -16,6 +17,9 @@ class Presentor {
         val instance: Presentor
             @Synchronized get() {
                 if (presentor == null) {
+
+                    Log.i("+++", "Presentor.instance == null")
+
                     presentor = Presentor()
                 }
                 return presentor!!

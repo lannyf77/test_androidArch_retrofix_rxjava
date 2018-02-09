@@ -1,6 +1,7 @@
 package com.example.linma9.mytechcruncharticlelistapplication.DI.module
 
 import android.app.Application
+import android.util.Log
 import com.example.linma9.mytechcruncharticlelistapplication.DI.scope.ViewScope
 import com.example.linma9.mytechcruncharticlelistapplication.database.DataManager
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
@@ -18,5 +19,8 @@ class PresentorModule() {
     @Provides
     @ViewScope
 
-    fun presentor() : Presentor = Presentor.instance
+    fun presentor() : Presentor {
+        Log.i("+++", "PresentorModule.presentor(), return Presentor.instance")
+        return Presentor.instance
+    }
 }

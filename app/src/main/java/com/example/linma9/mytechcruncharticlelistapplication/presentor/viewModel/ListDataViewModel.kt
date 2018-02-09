@@ -3,10 +3,12 @@ package com.example.linma9.mytechcruncharticlelistapplication.presentor.viewMode
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
+import android.util.Log
 
 import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.database.DataManager
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
+import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
 
@@ -82,17 +84,19 @@ class ListDataViewModel(application: Application) : ParcelableViewModel(applicat
         return mTCListObservable
     }
 
-    fun subscribeToDbPostChanges(startInOtherThread: Boolean) : MutableLiveData<List<CTViewDataItem>> {
+    fun subscribeToDbPostChanges(startInOtherThread: Boolean, presentor: Presentor) : MutableLiveData<List<CTViewDataItem>> {
 
         if (mDataMgr != null) {
-            ////Log.d("eee888","+++ +++ +++ ListDataViewModel:subscribeToDbPostChanges()"+"\nthread:"+Thread.currentThread().getId())
+            Log.d("eee888","+++ +++ +++ ListDataViewModel:subscribeToDbPostChanges()"+"\nthread:"+Thread.currentThread().getId())
             mTCListObservable =  mDataMgr!!.subscribeToDbPostChanges(startInOtherThread)
 
         } else {
-            ////Log.w("eee888","+++ @@@@@@@@@@@@@ mDataMgr==null, ListDataViewModel:subscribeToDbPostChanges()"+"\nthread:"+Thread.currentThread().getId())
+            Log.w("eee888","+++ @@@@@@@@@@@@@ mDataMgr==null, ListDataViewModel:subscribeToDbPostChanges()"+"\nthread:"+Thread.currentThread().getId())
 
             //for testing, directly pull from repository
-            mTCListObservable = MyApp.presentorComponenet.getPresenter().getDataList()
+            mTCListObservable = presentor.getDataList()
+
+            //mTCListObservable = MyApp.presentorComponenet.getPresenter().getDataList()
             //mTCListObservable = Presentor.instance.getDataList()
         }
         return mTCListObservable
