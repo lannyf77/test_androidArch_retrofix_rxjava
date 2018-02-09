@@ -15,6 +15,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 
 import java.util.ArrayList
+import javax.inject.Singleton
 
 
 /**
@@ -27,7 +28,7 @@ import java.util.ArrayList
  it provides MutableLiveData for monitoring the data chnage
  */
 
-
+//@Singleton  // since we use scope @ApplicationScope, so it is application wide singleton managered by dagger
 class DataManager {
 
     private var mDb: AppDatabase? = null
@@ -45,14 +46,17 @@ class DataManager {
             }
     }
 
+    /**
+     * the use of DataManager.instance have been replaced with dagger injection, no place is using DataManager.instance
+     * in case wnat to do that again, constructor has to be called before DataManager.instance
+     * for that use case senario here to set the dataMgr for later the call of DataManager.instance
+     */
+
     constructor(application: Application) {
         mApplication = application
         dataMgr = this
 
-        //Log.e("eee888", "+++ +++ @@@ +++++++++++++++++++ DataManager:ctor(), this: ${this}")
-
-//        // has no way to to unregister in this DataManager
-//        GlobalEventBus.instance.register(this)
+        Log.e("eee888", "+++ +++ @@@ +++++++++++++++++++ DataManager:ctor(), this: ${this}")
     }
 
     fun registerEvtBus() {

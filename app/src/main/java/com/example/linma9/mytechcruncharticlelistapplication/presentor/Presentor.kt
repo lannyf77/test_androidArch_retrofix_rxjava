@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import com.example.linma9.mytechcruncharticlelistapplication.MyApp
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.DataRepository
+import javax.inject.Inject
 
 /**
  * Created by linma9 on 1/23/18.
@@ -21,12 +22,14 @@ class Presentor {
             }
     }
 
-    public fun pullDataFromRemoteServer() {
+    fun pullDataFromRemoteServer() {
+
         MyApp.graph.getDataRepository().pullDataFromRemoteServer()
         //DataRepository.instance.pullDataFromRemoteServer()
     }
 
-    public fun getDataList(): MutableLiveData<List<CTViewDataItem>> {
+    fun getDataList(): MutableLiveData<List<CTViewDataItem>> {
+
         return MyApp.graph.getDataRepository().getDataList()
         //return DataRepository.instance.getDataList()
     }

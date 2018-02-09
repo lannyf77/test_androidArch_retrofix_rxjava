@@ -78,7 +78,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
             infiniteScrollListener = InfiniteScrollListener(
                     {
-                        MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                        MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
                         //Presentor.instance.pullDataFromRemoteServer()
                     },
                     linearLayout)
@@ -212,7 +212,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 5) {
                     //Log.d("tag", "+++ +++ %%% @@@ addPostsToRecycleViewData(), call pullDataFromRemoteServer(), currentAuthorFilterId: $currentAuthorFilterId")
 
-                    MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                    MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
 
                     //Presentor.instance.pullDataFromRemoteServer()
                 }
@@ -249,7 +249,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 10) {
                     //Log.d("tag", "+++ +++ %%% @@@ resetPostFilter(): currentAuthorFilterId: $currentAuthorFilterId")
 
-                    MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                    MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
                     //Presentor.instance.pullDataFromRemoteServer()
                 }
 
@@ -298,7 +298,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
                     if (list.size < 10) {
 
-                        MyApp.graph.getPresenter().pullDataFromRemoteServer()
+                        MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
 
                         //Presentor.instance.pullDataFromRemoteServer()
                     }

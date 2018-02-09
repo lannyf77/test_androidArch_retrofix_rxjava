@@ -1,4 +1,4 @@
-package com.example.linma9.mytechcruncharticlelistapplication.DI
+package com.example.linma9.mytechcruncharticlelistapplication.DI.module
 
 import com.example.linma9.mytechcruncharticlelistapplication.model.service.NetworkUtils
 import dagger.Module

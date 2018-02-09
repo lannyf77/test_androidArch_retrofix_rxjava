@@ -1,4 +1,4 @@
-package com.example.linma9.mytechcruncharticlelistapplication.DI
+package com.example.linma9.mytechcruncharticlelistapplication.DI.module
 
 import android.app.Application
 import android.content.Context
@@ -19,9 +19,6 @@ class AppModule (private val app: Application){
     @Singleton
     fun provideAppContext(): Context = app
 
-    @Provides
-    @Singleton
-    fun presentor() : Presentor = Presentor.instance
 
     /**
      * @Singleton

@@ -233,11 +233,14 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     fun initSession() {
         MyApp.graph.getNetworkUtils().init()
         //NetworkUtils.instance!!.init()
-        DataManager.instance!!.registerEvtBus()
+
+        MyApp.dataMgrComponenet.getDataManager().registerEvtBus()
+        //DataManager.instance!!.registerEvtBus()
     }
 
     fun clearSession() {
-        DataManager.instance!!.unregisterEvtBus()
+        MyApp.dataMgrComponenet.getDataManager().unregisterEvtBus()
+        //DataManager.instance!!.unregisterEvtBus()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

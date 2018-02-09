@@ -60,7 +60,7 @@ class ListDataViewModel(application: Application) : ParcelableViewModel(applicat
         public val LAST_SAVED_AUTHOR_FILTER: String = "LAST_SAVED_AUTHOR_FILTER"
     }
 
-    private var mDataMgr: DataManager? = null
+    private var mDataMgr: DataManager
 
     /**
      * Expose the LiveData query so the UI can observe it.
@@ -70,8 +70,9 @@ class ListDataViewModel(application: Application) : ParcelableViewModel(applicat
     init {
         ////Log.d("eee888","+++ +++ %%% ListDataViewModel:init(), currentAuthorFilterId: $currentAuthorFilterId"+"\nthread:"+Thread.currentThread().getId())
 
-        mDataMgr = DataManager(application)
-        mDataMgr!!.createDb()
+        mDataMgr = MyApp.dataMgrComponenet.getDataManager()
+        //mDataMgr = DataManager(application)
+        mDataMgr.createDb()
     }
 
     /**
@@ -91,7 +92,7 @@ class ListDataViewModel(application: Application) : ParcelableViewModel(applicat
             ////Log.w("eee888","+++ @@@@@@@@@@@@@ mDataMgr==null, ListDataViewModel:subscribeToDbPostChanges()"+"\nthread:"+Thread.currentThread().getId())
 
             //for testing, directly pull from repository
-            mTCListObservable = MyApp.graph.getPresenter().getDataList()
+            mTCListObservable = MyApp.presentorComponenet.getPresenter().getDataList()
             //mTCListObservable = Presentor.instance.getDataList()
         }
         return mTCListObservable

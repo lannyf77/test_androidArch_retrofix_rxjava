@@ -42,7 +42,7 @@ class DataRepository @Inject constructor() {
 
         /**
          * if using @Singleton & @Inject constructor(), then the dagger will provide the singleton
-         * so set the dataRepository
+         * so set the dataRepository for later the call of DataRepository.instance
          */
         if (dataRepository == null) {
             dataRepository = this
@@ -169,7 +169,9 @@ class DataRepository @Inject constructor() {
                 var excerpt: String = post.excerpt ?: ""
                 val url: String = post.url ?: ""
 
-                var categories: String = DataManager.instance!!.buildCategoryString(post)
+                var categories: String = MyApp.dataMgrComponenet.getDataManager().buildCategoryString(post)
+                //var categories: String = DataManager.instance!!.buildCategoryString(post)
+
                 val tcData = buildOneTCData(author, postId!!, authorName, avatarUrl, title, dateStr, excerpt, url,
                         categories)
                 convertedPosts.add(tcData)
