@@ -33,6 +33,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatDelegate
 import android.util.SparseIntArray
 import android.view.WindowManager
+import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
 import java.util.*
 
 
@@ -189,7 +190,12 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         }
 
         val fab = findViewById<FloatingActionButton>(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show() }
+        fab.setOnClickListener {
+
+            view -> run {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+            }
+        }
 
         theLifeCycleObserve = TheLifeCycleObserve(lifecycle, object : TheLifeCycleObserve.OnLifeCycleChange {
             override fun onCreate() {

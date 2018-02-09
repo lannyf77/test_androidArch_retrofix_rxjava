@@ -74,17 +74,16 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
         //use dagger to inject viewScope presentor
         if (MyApp.graph != null) {
-            MyApp.graph.addChildModle(PresentorModule()).inject(this)
+            MyApp.graph
+                    .addChildModle(PresentorModule())
+                    .inject(this)
         }
-
-
         return view
     }
 
     var infiniteScrollListener: InfiniteScrollListener? = null
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
 
         articlesList!!.apply {
             setHasFixedSize(true)

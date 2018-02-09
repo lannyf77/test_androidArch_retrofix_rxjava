@@ -3,6 +3,9 @@ package com.example.linma9.mytechcruncharticlelistapplication
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.example.linma9.mytechcruncharticlelistapplication.DI.scope.ViewScope
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Created by linma9 on 1/23/18.

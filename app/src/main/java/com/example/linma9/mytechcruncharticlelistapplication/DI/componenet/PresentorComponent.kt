@@ -1,8 +1,10 @@
 package com.example.linma9.mytechcruncharticlelistapplication.DI.componenet
 
+import android.support.v7.widget.LinearLayoutManager
 import com.example.linma9.mytechcruncharticlelistapplication.ArticlesFragment
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.scope.ViewScope
+import com.example.linma9.mytechcruncharticlelistapplication.InfiniteScrollListener
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import dagger.Subcomponent
 

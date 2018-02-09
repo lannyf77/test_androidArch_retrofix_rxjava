@@ -8,7 +8,7 @@
 
                                                  android:stateListAnimator="@null"
 
-                                                 tools:context="com.example.linma9.mytechcrunchlistapplication.MainActivity">
+                                                 tools:context="com.example.linma9.mytechcruncharticlelistapplication.MainActivity">
 
     <!-- parallax toolbar header -->
     <android.support.design.widget.AppBarLayout
@@ -16,6 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/appbar_header_height"
         android:fitsSystemWindows="true"
+
+        android:stateListAnimator="@null"
+
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
