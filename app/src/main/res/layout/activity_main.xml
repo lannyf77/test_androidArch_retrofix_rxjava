@@ -5,6 +5,9 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
+
+                                                 android:stateListAnimator="@null"
+
                                                  tools:context="com.example.linma9.mytechcrunchlistapplication.MainActivity">
 
     <!-- parallax toolbar header -->
