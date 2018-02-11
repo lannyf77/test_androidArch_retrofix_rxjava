@@ -2,14 +2,14 @@ package com.example.linma9.mytechcruncharticlelistapplication.database
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
 /**
  * Created by linma9 on 1/23/18.
  */
 
-
-@Entity(tableName = "post")
+@Entity(tableName = "post", indices = arrayOf(Index(value = "postID", unique = true)))
 class DbPost (
 
     @ColumnInfo(name = "postID")

@@ -1,5 +1,6 @@
 package com.example.linma9.mytechcruncharticlelistapplication
 
+import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.content.Context
@@ -218,11 +219,11 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
                 } catch(e: Exception) {
                     //Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::theLifeCycleObserve:onDestroy(), !!! exception,  DataManager.instance"+DataManager.instance+", e:"+e.toString())
                 }
-                lifecycle.removeObserver(theLifeCycleObserve)
+                lifecycle.removeObserver(theLifeCycleObserve as LifecycleObserver)
             }
 
         })
-        lifecycle.addObserver(theLifeCycleObserve)
+        lifecycle.addObserver(theLifeCycleObserve as LifecycleObserver)
     }
 
     fun initTheme() {

@@ -20,8 +20,20 @@ class InfiniteScrollListener (val func: () -> Unit,
     private var visibleItemCount = 0
     private var totalItemCount = 0
 
+    lateinit var mHandlerFunc: (() -> Unit)
+
+    fun setHandler(func: () -> Unit) {
+        mHandlerFunc = func
+    }
+
+    lateinit var mListenFunc: ((loading: Boolean) -> Unit)
+    fun setListner(func: (loading: Boolean) -> Unit) {
+        mListenFunc = func
+    }
+
     init{
         //Log.i("InfiniteScrollListener", "+++ +++ in init ")
+        setHandler(func)
     }
 
     fun reset() {
@@ -66,9 +78,19 @@ class InfiniteScrollListener (val func: () -> Unit,
             if (!loading && (totalItemCount - visibleItemCount)
                     <= (firstVisibleItem + visibleThreshold)) {
                 // End has been reached
-                //Log.i("InfiniteScrollListener", "+++ +++ %%% call func() End reached")
-                func()
+                Log.e("InfiniteScrollListener", "+++ +++ %%% call func() End reached")
+                mHandlerFunc()
                 loading = true
+            }
+
+//            Log.d("InfiniteScrollListener", "+++ +++ %%% loading: "+loading)
+
+            if(mListenFunc != null) {
+                mListenFunc(loading)
+            }
+        } else {
+            if(mListenFunc != null) {
+                mListenFunc(false)
             }
         }
 

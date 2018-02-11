@@ -61,7 +61,7 @@ class ArticleDelegateAdapter(val viewActions: onViewSelectedListener) : ViewType
             //Picasso.with(itemView.context).load(item.thumbnail).into(img_thumbnail)
             img_thumbnail.loadImg(item.thumbnail)
             description.text = Html.fromHtml(item.title)
-            author.text = item.author
+            author.text = item.author + ", " + item.postId
             time.text = item.created.getFriendlyTime()
             snippet.text = Html.fromHtml(item.snippet)
             categories.text = item.categories

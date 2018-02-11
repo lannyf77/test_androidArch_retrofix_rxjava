@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -96,7 +97,7 @@ class DataRepository @Inject constructor() {
         okHtppUtil.getPostsFromWorldPressTCWithRx(object : Observer<Posts> {
             override fun onNext(posts: Posts) {
 
-                //Log.i("+++", "Observer:onNext() ${posts.toString()}")
+                Log.i("+++", "Observer:onNext() ${posts.toString()}")
 
                 onPostsReady (posts)
             }
@@ -106,7 +107,7 @@ class DataRepository @Inject constructor() {
             }
 
             override fun onError(e: Throwable) {
-                //Log.e("+++", "Observer:onError() {$e.oString()}")
+                Log.e("+++", "Observer:onError() {$e.oString()}")
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -125,11 +126,11 @@ class DataRepository @Inject constructor() {
         val gson = Gson()
         val okHtppUtil = MyApp.graph.getNetworkUtils()  //NetworkUtils.instance
 
-        //Log.w("eee888-testWCGson", "+++ +++ @@@ pullDataFromRemoteServer(), call okHtppUtil.getPostsFromWorldPressTC()")
+        Log.w("eee888-testWCGson", "+++ +++ @@@ pullDataFromRemoteServer(), call okHtppUtil.getPostsFromWorldPressTC()")
 
         okHtppUtil.getPostsFromWorldPressTC(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {
-                //Log.w("eee888-testWCGson", "+++ +++ @@@ pullDataFromRemoteServer():onFailure(), \nresp:"+e.toString())
+                Log.w("eee888-testWCGson", "+++ +++ @@@ pullDataFromRemoteServer():onFailure(), \nresp:"+e.toString())
             }
 
             override fun onResponse(call: Call?, response: Response?) {
@@ -149,10 +150,11 @@ class DataRepository @Inject constructor() {
     fun onPostsReady (posts: Posts) {
         //Log.w("eee888-testWCGson", "+++ +++ @@@ onPostsReady(), ${posts.posts!!.size}, ==\n ${posts}")
 
-//                    var postsJsonStr = gson.toJson(posts)
-//
-//                    var jsonObj = JSONObject(postsJsonStr)
-//                    //Log.w("eee888-testWCGson", "+++ okHttp_testGson():onResponse(), gson.toJson(gist): "+jsonObj.toString(2))
+        val gson = Gson()
+                    var postsJsonStr = gson.toJson(posts)
+
+                    var jsonObj = JSONObject(postsJsonStr)
+                    Log.w("eee888-testWCGson", "+++ okHttp_testGson():onResponse(), gson.toJson(gist): "+jsonObj.toString(2))
 
         var postsArray: ArrayList<Post>? = posts!!.posts
         if (postsArray != null && postsArray.size > 0) {

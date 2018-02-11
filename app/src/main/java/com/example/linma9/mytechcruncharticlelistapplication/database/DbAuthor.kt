@@ -2,6 +2,7 @@ package com.example.linma9.mytechcruncharticlelistapplication.database
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
 /**
@@ -9,7 +10,7 @@ import android.arch.persistence.room.PrimaryKey
  */
 
 
-@Entity(tableName = "author")
+@Entity(tableName = "author", indices = arrayOf(Index(value = "authorid", unique = true)))
 class DbAuthor(
 
         @ColumnInfo(name = "authorid")

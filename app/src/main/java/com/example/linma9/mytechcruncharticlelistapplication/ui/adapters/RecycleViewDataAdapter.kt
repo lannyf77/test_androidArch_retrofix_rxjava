@@ -45,10 +45,15 @@ class RecycleViewDataAdapter(val listener: ArticleDelegateAdapter.onViewSelected
          */
     }
 
+    var showLoading: Boolean = true;
+
+    lateinit var dedupSet: HashMap<Int, CTViewDataItem>
+
     init {
         delegateAdapters.put(ViewTypeConstants.SPINNER, LoadingDelegateAdapter())
         delegateAdapters.put(ViewTypeConstants.ARTICL, ArticleDelegateAdapter(listener))
         items = ArrayList()
+        dedupSet = HashMap<Int, CTViewDataItem>()
         items.add(loadingItem)
 
         //Log.e("eee888", "+++ +++ RecycleViewDataAdapter:init() this: $this"+", delegateAdapters:"+delegateAdapters.size())
@@ -76,14 +81,23 @@ class RecycleViewDataAdapter(val listener: ArticleDelegateAdapter.onViewSelected
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        if (delegateAdapters.get(getItemViewType(position)) is LoadingDelegateAdapter) {
+            (delegateAdapters.get(getItemViewType(position)) as LoadingDelegateAdapter).showLoading = showLoading
+        }
         delegateAdapters.get(getItemViewType(position)).onBindViewHolder(holder, this.items[position])
     }
 
     fun addArticls(articls: List<CTViewDataItem>) {
+
+        val newList = buildNewItems (articls)
+
+        Log.i("eee888-observeViewModel", "+++ +++ %%% addArticls() newList = buildNewItems (articls), newList.size:"+newList.size)
+
         // first remove loading and notify
         val initPosition = items.size - 1
         // insert new articls before the loading (spinner) item
-        items.addAll(initPosition, articls)
+        items.addAll(initPosition, newList)
 
         // partially notify does not cuase the recycleview to fully update, the list does not show the new added items
         //notifyItemRangeChanged(initPosition, items.size + 1 /* plus loading item */)
@@ -94,26 +108,28 @@ class RecycleViewDataAdapter(val listener: ArticleDelegateAdapter.onViewSelected
 
     }
 
-    fun addArticls_org(articls: List<CTViewDataItem>) {
-        // first remove loading and notify
-        val initPosition = items.size - 1
-        items.removeAt(initPosition)
-        notifyItemRemoved(initPosition)
-
-        // insert articls and the loading at the end of the list
-        items.addAll(articls)
-        items.add(loadingItem)
-        notifyItemRangeChanged(initPosition, items.size + 1 /* plus loading item */)
-    }
+//    fun addArticls_org(articls: List<CTViewDataItem>) {
+//        // first remove loading and notify
+//        val initPosition = items.size - 1
+//        items.removeAt(initPosition)
+//        notifyItemRemoved(initPosition)
+//
+//        // insert articls and the loading at the end of the list
+//        items.addAll(articls)
+//        items.add(loadingItem)
+//        notifyItemRangeChanged(initPosition, items.size + 1 /* plus loading item */)
+//    }
 
     fun clearAndAddArticls(articls: List<CTViewDataItem>) {
 
         var testOldItemSize = items.size
 
+        clearDedupMap()
         items.clear()
         //notifyItemRangeRemoved(0, getLastPosition())
 
-        items.addAll(articls)
+        val newList = buildNewItems (articls)
+        items.addAll(newList)
         items.add(loadingItem)
 
         //Log.i("eee888", "+++ +++ %%% clearAndAddArticls(), testOldItemSize: $testOldItemSize, items.size: ${items.size}")
@@ -129,5 +145,22 @@ class RecycleViewDataAdapter(val listener: ArticleDelegateAdapter.onViewSelected
     }
 
     private fun getLastPosition() = if (items.lastIndex == -1) 0 else items.lastIndex
+
+    private fun buildNewItems (articls: List<CTViewDataItem>): ArrayList<CTViewDataItem> {
+        var newList = ArrayList<CTViewDataItem>()
+        for (item in articls) {
+            if (dedupSet.isNotEmpty() && dedupSet.containsKey(item.postId)) {
+                continue
+            }
+            dedupSet.put(item.postId, item)
+            newList.add(item)
+        }
+
+        return newList
+    }
+
+    private fun clearDedupMap() {
+        dedupSet.clear()
+    }
 
 }

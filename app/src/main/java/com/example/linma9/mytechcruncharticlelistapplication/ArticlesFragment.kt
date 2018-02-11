@@ -55,6 +55,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         private val KEY_REDDIT_NEWS = "redditNews"
     }
 
+    private lateinit var presentorComponent: PresentorComponent
     private var theLifeCycleObserve: TheLifeCycleObserve? = null
 
     //private var databaseMgr: DataManager? = null
@@ -74,12 +75,17 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
         //use dagger to inject viewScope presentor
         if (MyApp.graph != null) {
-            MyApp.graph
-                    .addChildModle(PresentorModule())
+            presentorComponent = MyApp.graph
+                    .addChildModle(PresentorModule(getContext()!!))
+
+            presentorComponent
                     .inject(this)
         }
+
         return view
     }
+
+    var showLoading: Boolean = true;
 
     var infiniteScrollListener: InfiniteScrollListener? = null
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,13 +98,32 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
             clearOnScrollListeners()
 
-            infiniteScrollListener = InfiniteScrollListener(
+            infiniteScrollListener = presentorComponent.getInfiniteScrollListener()
+
+            // testing do custome set the handler instead of using the hardcoded in the PresentorModule
+            infiniteScrollListener?.setHandler(
                     {
+                        showLoading = true
                         presentor.pullDataFromRemoteServer()
-                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
-                        //Presentor.instance.pullDataFromRemoteServer()
-                    },
-                    linearLayout)
+                    }
+            )
+
+            infiniteScrollListener?.setListner(
+                    {
+                        showLoading = it
+                    }
+            )
+
+// old non-injection way to instantiate the InfiniteScrollListener with
+// a custom handling function passed in at this moment
+
+//            infiniteScrollListener = InfiniteScrollListener(
+//                    {
+//                        presentor.pullDataFromRemoteServer()
+//                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+//                        //Presentor.instance.pullDataFromRemoteServer()
+//                    },
+//                    linearLayout)
 
             addOnScrollListener(infiniteScrollListener)
 
@@ -108,7 +133,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         }
 
 
-        theLifeCycleObserve = TheLifeCycleObserve(lifecycle, object : TheLifeCycleObserve.OnLifeCycleChange {
+        theLifeCycleObserve = TheLifeCycleObserve((lifecycle as LifecycleRegistry), object : TheLifeCycleObserve.OnLifeCycleChange {
             override fun onCreate() {
                 //Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
 
@@ -139,11 +164,11 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
 //                        "\nthis:"+this@ArticlesFragment)
                 GlobalEventBus.instance.unregister(this@ArticlesFragment)
-                lifecycle.removeObserver(theLifeCycleObserve)
+                lifecycle.removeObserver((theLifeCycleObserve as LifecycleObserver))
             }
 
         })
-        lifecycle.addObserver(theLifeCycleObserve)
+        lifecycle.addObserver((theLifeCycleObserve  as LifecycleObserver))
 
         //initStart()
 
@@ -164,7 +189,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
         mCategoryFilter = null
 
-        val provider : ViewModelProvider.Factory = ViewModelProviders.DefaultFactory(this.getActivity().getApplication())
+        val provider : ViewModelProvider.Factory = ViewModelProviders.DefaultFactory(this.getActivity()!!.getApplication())
         val bundleAwareViewModelFactory : BundleAwareViewModelFactory<ParcelableViewModel> = BundleAwareViewModelFactory(savedInstanceState, provider)
 
         listDataViewModel = ViewModelProviders.of(this, bundleAwareViewModelFactory).get(ListDataViewModel::class.java)
@@ -219,7 +244,8 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
     var currentAuthorFilterId: Int? = null
     fun addPostsToRecycleViewData(datalist: List<CTViewDataItem>) : List<CTViewDataItem>{
         var list = datalist
-        //Log.d("tag", "+++ +++ %%% addPostsToRecycleViewData(),  list: ${list!!.size}currentFilterId: ${currentAuthorFilterId}")
+        Log.d("tag", "+++ +++ %%% addPostsToRecycleViewData(),  list: ${list!!.size} currentFilterId: ${currentAuthorFilterId}")
+        showLoading = false
         if (datalist != null) {
             if (currentAuthorFilterId != null || mCategoryFilter != null) {
                 list = datalist.filter {
@@ -227,8 +253,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                     (currentAuthorFilterId == null && (it.categories!!.indexOf(mCategoryFilter!!)>=0)) || (mCategoryFilter == null && it.authorId == currentAuthorFilterId)
                 }
                 if (list.size < 5) {
-                    //Log.d("tag", "+++ +++ %%% @@@ addPostsToRecycleViewData(), call pullDataFromRemoteServer(), currentAuthorFilterId: $currentAuthorFilterId")
+                    Log.d("tag", "+++ +++ %%% @@@ addPostsToRecycleViewData(), call pullDataFromRemoteServer(), currentAuthorFilterId: $currentAuthorFilterId")
 
+                    showLoading = true
                     presentor.pullDataFromRemoteServer()
 
                     //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
@@ -241,9 +268,12 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         }
 
         if (list != null) {
+
+            Log.e("eee888-observeViewModel", "+++ +++ %%% call .addArticls(list), list.size:"+list.size)
+
             (articles_list.adapter as RecycleViewDataAdapter).addArticls(list)
         } else {
-            //Log.e("eee888-observeViewModel", "+++ +++ %%% !!! datalist==null")
+            Log.e("eee888-observeViewModel", "+++ +++ %%% !!! datalist==null")
         }
         return list
     }
@@ -268,6 +298,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 if (list.size < 10) {
                     //Log.d("tag", "+++ +++ %%% @@@ resetPostFilter(): currentAuthorFilterId: $currentAuthorFilterId")
 
+                    showLoading = true
                     presentor.pullDataFromRemoteServer()
 
                     //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
@@ -319,6 +350,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
                     if (list.size < 10) {
 
+                        showLoading = true
                         presentor.pullDataFromRemoteServer()
 
                         //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
@@ -386,7 +418,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
             DIALOG_WITH_RADIO_BUTTON -> {
                 val list = items.toTypedArray<CharSequence>()
                 val poistion = 0
-                val alertDilogBuilder = AlertDialog.Builder(activity, R.style.myDialogeTheme)
+                val alertDilogBuilder = AlertDialog.Builder(getContext()!!, R.style.myDialogeTheme)
                 alertDilogBuilder.setTitle(title)
                         .setSingleChoiceItems(list, poistion, object : DialogInterface.OnClickListener {
 
@@ -394,7 +426,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
                                 onSelectedCategory(items[index])
 
-                                Toast.makeText(activity.applicationContext,
+                                Toast.makeText(activity!!.applicationContext,
                                         items[index],  //"which:"+index,
                                         Toast.LENGTH_SHORT).show()
                                 dialog.dismiss()
@@ -418,7 +450,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
                 })
             }
             else -> {
-                val alertDilogBuilder = AlertDialog.Builder(activity)
+                val alertDilogBuilder = AlertDialog.Builder(getContext()!!)
 
                 alertDilogBuilder.setTitle(title)
                 alertDilogBuilder.setMessage(alertMessage)
@@ -467,7 +499,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         override fun onClick(dialog: DialogInterface, which: Int) {
             // process
             //which means position
-            Toast.makeText(activity.applicationContext,
+            Toast.makeText(activity!!.applicationContext,
                     "which:"+which,
                     Toast.LENGTH_SHORT).show()
             dialog.dismiss()
