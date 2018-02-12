@@ -11,6 +11,8 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
+import timber.log.Timber
 
 /**
  * Created by linma9 on 1/23/18.
@@ -51,7 +53,21 @@ class NetworkUtils {
     }
 
     companion object {
-        internal var client = OkHttpClient()
+
+        fun loggingInterceptor(): HttpLoggingInterceptor {
+            val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
+                message -> Timber.i(message)
+            })
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            return interceptor
+        }
+
+        internal var client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor())
+                //.cache(cache)
+                .build()
+
+                //OkHttpClient()
 
         internal var _this: NetworkUtils? = null
         val instance: NetworkUtils
@@ -84,5 +100,7 @@ class NetworkUtils {
         offset += Companion.postNumber
 
     }
+
+
 
 }

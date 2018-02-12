@@ -11,6 +11,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.DI.module.AppModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.DataManagerModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
+import timber.log.Timber
 
 import javax.inject.Inject
 
@@ -31,6 +32,9 @@ class MyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
+
         graph = initDagger()
         graph.inject(this)
 
