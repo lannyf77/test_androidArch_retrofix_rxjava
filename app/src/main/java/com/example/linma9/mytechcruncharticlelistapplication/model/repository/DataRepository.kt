@@ -7,7 +7,8 @@ import com.example.linma9.mytechcruncharticlelistapplication.database.DataManage
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.*
 
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
-import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+//import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 import com.google.gson.Gson
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -189,8 +190,10 @@ class DataRepository @Inject constructor() {
 
             //Log.w("eee888-testWCGson", "+++ +++ %%% pullDataFromRemoteServer():onResponse(), call GlobalEventBus.instance.post(dataEvt): ${dataEvt} thread: ${Thread.currentThread().getId()}")
 
-            //have no way to to unregister in the DataManager so use directly call
-            GlobalEventBus.instance.post(dataEvt)
+//            have no way to to unregister in the DataManager so use directly call
+//            GlobalEventBus.instance.post(dataEvt)
+
+            RxBus.publish(dataEvt)
 
             //DataManager.instance!!.onDataReady(dataEvt)
         }

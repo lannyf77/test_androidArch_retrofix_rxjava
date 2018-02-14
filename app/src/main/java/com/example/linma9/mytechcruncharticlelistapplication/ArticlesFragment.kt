@@ -26,11 +26,12 @@ import com.example.linma9.mytechcruncharticlelistapplication.DI.module.Presentor
 import com.example.linma9.mytechcruncharticlelistapplication.commons.extensions.inflate
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
-import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+//import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.ListDataViewModel
 //import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.news_fragment.*
 import com.example.linma9.mytechcruncharticlelistapplication.commons.extensions.adapterInterfaces.ViewTypeConstants
+import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
@@ -143,9 +144,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId()+
 //                        "\nthis:"+this@ArticlesFragment+
 //                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment))
-                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
-                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
-                }
+//                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
+//                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
+//                }
             }
 
             override fun onStar() {
@@ -153,17 +154,28 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                        "\nthis:"+this@ArticlesFragment+
 //                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment)+
 //                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment))
-                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
-                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
-                }
-                GlobalEventBus.instance.register(this@ArticlesFragment)
+//                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
+//                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
+//                }
+//                GlobalEventBus.instance.register(this@ArticlesFragment)
+
+                RxBus.listen(DataEvent::class.java).subscribe({
+                    //println("Im a Message event ${it.action} ${it.message}")
+                    if (it.eventType == DataEvent.EVENT_TYPE_STRING) {
+                        if ("settings".equals(it.getStringMessage())) {
+                            resetPostFilter (null)
+                        }
+                    }
+                })
+
+
                 initStart(savedInstanceState)
             }
 
             override fun onDestroy() {
 //                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
 //                        "\nthis:"+this@ArticlesFragment)
-                GlobalEventBus.instance.unregister(this@ArticlesFragment)
+//                GlobalEventBus.instance.unregister(this@ArticlesFragment)
                 lifecycle.removeObserver((theLifeCycleObserve as LifecycleObserver))
             }
 

@@ -12,7 +12,8 @@ import com.example.linma9.mytechcruncharticlelistapplication.model.data.Post
 import com.example.linma9.mytechcruncharticlelistapplication.model.data.Posts
 import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CTViewDataItem
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
-import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+//import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 
 import java.util.ArrayList
 import javax.inject.Singleton
@@ -62,15 +63,19 @@ class DataManager {
     fun registerEvtBus() {
 //        Log.e("eee888", "+++ +++ @@@ TheLifeCycleObserve+++++++++++++++++++ DataManager:registerEvtBus(), this: ${this}"+
 //                "\nisRegistered(DataManager): "+ GlobalEventBus.instance.isRegistered(this))
-        if (GlobalEventBus.instance.isRegistered(this)) {
-            GlobalEventBus.instance.unregister(this)
-        }
-        GlobalEventBus.instance.register(this)
+//        if (GlobalEventBus.instance.isRegistered(this)) {
+//            GlobalEventBus.instance.unregister(this)
+//        }
+//        GlobalEventBus.instance.register(this)
+
+        RxBus.listen(DataEvent::class.java).subscribe({
+            onDataReady(it)
+        })
     }
 
     fun unregisterEvtBus() {
-        //Log.e("eee888", "+++ +++ @@@ TheLifeCycleObserve+++++++++++++++++++ DataManager:unregisterEvtBus(), this: ${this}")
-        GlobalEventBus.instance.unregister(this)
+//        //Log.e("eee888", "+++ +++ @@@ TheLifeCycleObserve+++++++++++++++++++ DataManager:unregisterEvtBus(), this: ${this}")
+//        GlobalEventBus.instance.unregister(this)
     }
 
     fun createDb() {
@@ -186,7 +191,7 @@ class DataManager {
     }
 
     fun onDataReady(event: DataEvent) {
-        //Log.e("eee888", "+++ +++ %%% 111 eee888 dataMgr::onDataReady(), ${event} thread: ${Thread.currentThread().getId()}")
+        Log.e("eee888", "+++ +++ %%% 111 eee888 dataMgr::onDataReady(), ${event} thread: ${Thread.currentThread().getId()}")
         if (event.eventType == DataEvent.EVENT_TYPE_TCDATA ||
                 event.eventType == DataEvent.EVENT_TYPE_POSTS_DATA) {
             var ctDataList: List<CTViewDataItem>? = null

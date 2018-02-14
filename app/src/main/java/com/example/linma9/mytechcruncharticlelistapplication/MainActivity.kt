@@ -23,7 +23,7 @@ import android.widget.ImageView
 import com.example.linma9.mytechcruncharticlelistapplication.database.DataManager
 
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
-import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
+//import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
 import android.os.Build
 import android.preference.PreferenceManager
@@ -35,6 +35,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.util.SparseIntArray
 import android.view.WindowManager
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
+import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 import java.util.*
 
 
@@ -294,7 +295,10 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             R.id.action_settings -> {
                 var dataEvt: DataEvent = DataEvent()
                 dataEvt.setStringMessage("settings")
-                GlobalEventBus.instance.post(dataEvt)
+
+                RxBus.publish(dataEvt)
+
+//                GlobalEventBus.instance.post(dataEvt)
 
                 return true
             }
