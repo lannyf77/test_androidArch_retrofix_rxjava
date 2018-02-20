@@ -14,9 +14,16 @@ import com.example.linma9.mytechcruncharticlelistapplication.model.repository.CT
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.DataEvent
 //import com.example.linma9.mytechcruncharticlelistapplication.eventbus.GlobalEventBus
 import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.annotations.NonNull
+import io.reactivex.disposables.Disposable
 
 import java.util.ArrayList
 import javax.inject.Singleton
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.observers.DisposableObserver
 
 
 /**
@@ -60,6 +67,7 @@ class DataManager {
         Log.e("eee888", "+++ +++ @@@ +++++++++++++++++++ DataManager:ctor(), this: ${this}")
     }
 
+    var mDisposable: Disposable? = null
     fun registerEvtBus() {
 //        Log.e("eee888", "+++ +++ @@@ TheLifeCycleObserve+++++++++++++++++++ DataManager:registerEvtBus(), this: ${this}"+
 //                "\nisRegistered(DataManager): "+ GlobalEventBus.instance.isRegistered(this))
@@ -68,14 +76,50 @@ class DataManager {
 //        }
 //        GlobalEventBus.instance.register(this)
 
-        RxBus.listen(DataEvent::class.java).subscribe({
-            onDataReady(it)
+        if (mDisposable != null && mDisposable!!.isDisposed) {
+            mDisposable!!.dispose()
+        }
+
+        mDisposable = RxBus.listen(DataEvent::class.java).subscribeWith(object : DisposableObserver<DataEvent>() {
+            override fun onComplete() {
+                Log.e(TAG, "+++eee888 onComplete: All Done!")        }
+
+            override fun onNext(t: DataEvent) {
+                Log.e(TAG, "+++eee888on Next: " + t)
+                onDataReady(t)        }
+
+            override fun onError(e: Throwable) {
+                Log.e(TAG, "+++eee888 onError: ")
+            }
         })
     }
+
+    //  cannot use the created instance, You basically MUST instantiate a new observer each time.
+    // The protocol says that an observer may only receive one subscribe event.
+    // see https://stackoverflow.com/questions/47020972/android-rxjava2-subscription-within-onclick
+
+//    var theObserver: DisposableObserver<DataEvent> = object : DisposableObserver<DataEvent>() {
+//        override fun onComplete() {
+//            Log.e(TAG, "+++eee888 onComplete: All Done!")        }
+//
+//        override fun onNext(t: DataEvent) {
+//            Log.e(TAG, "+++eee888on Next: " + t)
+//            onDataReady(t)        }
+//
+//        override fun onError(e: Throwable) {
+//            Log.e(TAG, "+++eee888 onError: ")
+//        }
+//    }
+    ///
 
     fun unregisterEvtBus() {
 //        //Log.e("eee888", "+++ +++ @@@ TheLifeCycleObserve+++++++++++++++++++ DataManager:unregisterEvtBus(), this: ${this}")
 //        GlobalEventBus.instance.unregister(this)
+
+        if (mDisposable != null && mDisposable!!.isDisposed) {
+            mDisposable!!.dispose()
+        }
+        mDisposable = null
     }
 
     fun createDb() {

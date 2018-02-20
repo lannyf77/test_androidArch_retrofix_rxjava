@@ -5,6 +5,7 @@ package com.example.linma9.mytechcruncharticlelistapplication.eventbus
  */
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import org.reactivestreams.Subscription
 
 // Use object so we have a singleton instance
 object RxBus {
@@ -20,3 +21,25 @@ object RxBus {
     fun <T> listen(eventType: Class<T>): Observable<T> = publisher.ofType(eventType)
 
 }
+
+
+//class RxBus2 {
+//
+//    private val mBusSubject = SerializedSubject(PublishSubject.create())
+//
+//    fun <T> register(eventClass: Class<T>, onNext: Action1<T>): Subscription {
+//        return mBusSubject
+//                .filter({ event -> event.getClass().equals(eventClass) })
+//                .map({ obj -> obj })
+//                .subscribe(onNext)
+//    }
+//
+//    fun post(event: Any) {
+//        mBusSubject.onNext(event)
+//    }
+//
+//    companion object {
+//
+//        val instance = RxBus()
+//    }
+//}

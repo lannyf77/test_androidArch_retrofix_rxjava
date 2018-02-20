@@ -35,6 +35,8 @@ import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.BundleAwareViewModelFactory
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
 import java.util.*
@@ -147,8 +149,13 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
 //                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
 //                }
+                if (mDisposable != null && mDisposable!!.isDisposed) {
+                    mDisposable!!.dispose()
+                }
+                mDisposable = null
             }
 
+            var mDisposable: Disposable? = null
             override fun onStar() {
 //                Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onStar(), call initStart(), thread:"+Thread.currentThread().getId()+
 //                        "\nthis:"+this@ArticlesFragment+
@@ -159,7 +166,12 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                }
 //                GlobalEventBus.instance.register(this@ArticlesFragment)
 
-                RxBus.listen(DataEvent::class.java).subscribe({
+                if (mDisposable != null && mDisposable!!.isDisposed) {
+                    mDisposable?.dispose()
+                }
+                mDisposable = RxBus.listen(DataEvent::class.java)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
                     //println("Im a Message event ${it.action} ${it.message}")
                     if (it.eventType == DataEvent.EVENT_TYPE_STRING) {
                         if ("settings".equals(it.getStringMessage())) {
@@ -176,6 +188,12 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 //                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
 //                        "\nthis:"+this@ArticlesFragment)
 //                GlobalEventBus.instance.unregister(this@ArticlesFragment)
+
+                if (mDisposable != null && mDisposable!!.isDisposed) {
+                    mDisposable!!.dispose()
+                }
+                mDisposable = null
+
                 lifecycle.removeObserver((theLifeCycleObserve as LifecycleObserver))
             }
 
@@ -290,6 +308,10 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         return list
     }
 
+    /**
+     * filter the observable's LiveData
+     * reset the RecyclerView articles_list's adapter with filtered data
+     */
     fun resetPostFilter (filter: Int?) {
         mCategoryFilter = null
         currentAuthorFilterId = filter
@@ -321,7 +343,9 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
 
                 //Log.w("eee888", "+++ +++ %%% 111 list.size: ${list.size}, bf articles_list.layoutManager.itemCount: ${articles_list.layoutManager.itemCount}")
 
-                (articles_list.adapter as RecycleViewDataAdapter).clearAndAddArticls(list)
+                if (articles_list != null) {
+                    (articles_list.adapter as RecycleViewDataAdapter).clearAndAddArticls(list)
+                }
 
                 //Log.w("eee888", "+++ +++ %%% 222 aft articles_list.layoutManager.itemCount: ${articles_list.layoutManager.itemCount}")
             } else {

@@ -13,7 +13,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
 
 /**
- * Created by linma9 on 8/15/17.
+ * Created by linma9 on 1/23/18.
  */
 
 
