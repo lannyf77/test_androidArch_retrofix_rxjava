@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -49,7 +50,7 @@ import javax.inject.Inject
  * Created by linma9 on 1/23/18.
  */
 
-class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelectedListener {
+class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListener {
 
 //    private var redditNews: RedditNews? = null
 //    private val newsManager by lazy { NewsManager() }
@@ -136,7 +137,7 @@ class ArticlesFragment : LifecycleFragment(), ArticleDelegateAdapter.onViewSelec
         }
 
 
-        theLifeCycleObserve = TheLifeCycleObserve((lifecycle as LifecycleRegistry), object : TheLifeCycleObserve.OnLifeCycleChange {
+        theLifeCycleObserve = TheLifeCycleObserve((lifecycle), object : TheLifeCycleObserve.OnLifeCycleChange {
             override fun onCreate() {
                 //Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
 

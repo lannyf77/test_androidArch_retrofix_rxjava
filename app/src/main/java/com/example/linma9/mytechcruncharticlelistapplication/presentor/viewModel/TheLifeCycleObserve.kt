@@ -10,7 +10,7 @@ import android.arch.lifecycle.LifecycleRegistry
  * Created by linma9 on 1/23/18.
  */
 
-class TheLifeCycleObserve(private var lifecycle: LifecycleRegistry?, private var lifeCycleChangeListener: OnLifeCycleChange) : LifecycleObserver {
+class TheLifeCycleObserve(private var lifecycle: Lifecycle?, private var lifeCycleChangeListener: OnLifeCycleChange) : LifecycleObserver {
 
 
     interface OnLifeCycleChange {

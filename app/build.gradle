@@ -51,7 +51,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:${arch}"
     annotationProcessor "android.arch.lifecycle:compiler:${arch}"
     //room
-    compile "android.arch.persistence.room:runtime:${archRoomVersion}"
+    implementation "android.arch.persistence.room:runtime:${archRoomVersion}"
     annotationProcessor "android.arch.lifecycle:compiler:${arch}"
 
     annotationProcessor "android.arch.persistence.room:compiler:${archRoomVersion}"
@@ -60,7 +60,7 @@ dependencies {
 
     // JSON Parsing
     implementation 'com.google.code.gson:gson:2.6.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 
 
     // recyclerview
@@ -99,8 +99,8 @@ dependencies {
 
 
     //dagger2
-    api "com.google.dagger:dagger-android:${daggerVersion}"
-    api "com.google.dagger:dagger-android-support:${daggerVersion}" // if you use the support libraries
+    implementation "com.google.dagger:dagger-android:${daggerVersion}"
+    implementation "com.google.dagger:dagger-android-support:${daggerVersion}" // if you use the support libraries
 
     kapt "com.google.dagger:dagger-compiler:${daggerVersion}"
 

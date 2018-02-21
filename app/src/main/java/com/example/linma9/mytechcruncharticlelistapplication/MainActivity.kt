@@ -1,5 +1,6 @@
 package com.example.linma9.mytechcruncharticlelistapplication
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
@@ -39,12 +40,14 @@ import com.example.linma9.mytechcruncharticlelistapplication.eventbus.RxBus
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class MainActivity : AppCompatActivity() {
 
-    private val mRegistry: LifecycleRegistry = LifecycleRegistry(this);
-    override fun getLifecycle() : LifecycleRegistry {
-        return mRegistry
-    }
+////    private val mRegistry: Lifecycle = super.getLifecycle()
+////    private val mRegistry: LifecycleRegistry = LifecycleRegistry(this);
+//    override fun getLifecycle() : Lifecycle {
+//        return super.getLifecycle()
+////        return mRegistry
+//    }
 
     private var theLifeCycleObserve: TheLifeCycleObserve? = null
     private var collapsedMenu: Menu? = null
