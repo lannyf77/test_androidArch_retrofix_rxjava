@@ -1,5 +1,6 @@
 package com.example.linma9.mytechcruncharticlelistapplication.model.service.remote
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -32,6 +33,7 @@ class ServiceFactory {
 //            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
             val httpClientBuilder = OkHttpClient.Builder().addInterceptor(interceptor)
+                    .addNetworkInterceptor(StethoInterceptor())
             val client = httpClientBuilder.build()
 
 

@@ -42,20 +42,12 @@ class PresentorModule {
 
     @Provides
     @ViewScope
-
-    fun linearLayoutManager() : LinearLayoutManager {
-        return LinearLayoutManager(mContext)
-    }
-
-    @Provides
-    @ViewScope
     fun infiniteScrollListener() : InfiniteScrollListener {
         return InfiniteScrollListener(
                 {
                     //  default handler
                     presentor().pullDataFromRemoteServer()
-                },
-                linearLayoutManager())
+                })
     }
 
     // really would like to have the flexibility of letting the consumer provides the

@@ -107,6 +107,13 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 
+
+    // Stetho library for more advanced debugging (i.e. inspecting network requests)
+    implementation "com.facebook.stetho:stetho:${stethoVersion}"
+    implementation "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
+    implementation 'com.squareup.okhttp:okhttp:2.3.0'
+    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.4'
+
 }
 
 //configurations.all {

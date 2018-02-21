@@ -11,16 +11,21 @@ import javax.inject.Named
  * Created by linma9 on 1/23/18.
  */
 
-class InfiniteScrollListener (val func: () -> Unit,
-                              val layoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+class InfiniteScrollListener (val func: () -> Unit
+                              ) : RecyclerView.OnScrollListener() {
     private var previousTotal = 0
     private var loading = true
     private var visibleThreshold = 2
     private var firstVisibleItem = 0
     private var visibleItemCount = 0
     private var totalItemCount = 0
+    private lateinit var layoutManager: LinearLayoutManager
 
     lateinit var mHandlerFunc: (() -> Unit)
+
+    fun setLayoutManager(layoutMgr: LinearLayoutManager) {
+        layoutManager = layoutMgr
+    }
 
     fun setHandler(func: () -> Unit) {
         mHandlerFunc = func

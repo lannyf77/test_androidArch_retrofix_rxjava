@@ -11,6 +11,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.DI.module.AppModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.DataManagerModule
 import com.example.linma9.mytechcruncharticlelistapplication.DI.module.PresentorModule
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
+import com.facebook.stetho.Stetho
 import timber.log.Timber
 
 import javax.inject.Inject
@@ -41,6 +42,8 @@ class MyApp : Application() {
         dataMgrComponenet = graph.addChildModle(DataManagerModule(this))
 
         //presentorComponenet = graph.addChildModle(PresentorModule())
+
+        Stetho.initializeWithDefaults(this)
 
         Log.d("MyApp", "App test the : $locationManager instance")
         //TODO do some other cool stuff here

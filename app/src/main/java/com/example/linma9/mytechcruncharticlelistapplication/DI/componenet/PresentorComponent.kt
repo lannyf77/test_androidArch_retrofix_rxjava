@@ -25,7 +25,6 @@ interface PresentorComponent {
 
     fun getPresenter(): Presentor
 
-    fun getLinearLayoutManager(): LinearLayoutManager
     fun getInfiniteScrollListener(): InfiniteScrollListener
 
 }

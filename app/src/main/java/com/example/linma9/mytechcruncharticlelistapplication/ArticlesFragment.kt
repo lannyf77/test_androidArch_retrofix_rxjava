@@ -104,6 +104,8 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 
             infiniteScrollListener = presentorComponent.getInfiniteScrollListener()
 
+            infiniteScrollListener?.setLayoutManager(linearLayout)
+
             // testing do custome set the handler instead of using the hardcoded in the PresentorModule
             infiniteScrollListener?.setHandler(
                     {
