@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -69,6 +70,9 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 
     //private lateinit var presentorComponenet: PresentorComponent
 
+    private lateinit var swipeContainer : SwipeRefreshLayout
+
+
     @Inject
     lateinit var presentor: Presentor
 
@@ -86,7 +90,25 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                     .inject(this)
         }
 
+        setUpPullRefres(view)
+
         return view
+    }
+
+    fun setUpPullRefres(view: View) {
+        swipeContainer = view.findViewById(R.id.swipeContainer) as SwipeRefreshLayout
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener {
+            presentor.pullDataFromRemoteServer()
+        }
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light)
+
     }
 
     var showLoading: Boolean = true;
@@ -252,6 +274,9 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 
 //                Log.e("eee888-observeViewModel", "+++ +++ %%% <<<>>> observableData.observe:onChanged(), ${datalist!!.size}, currentAuthorFilterId:"+currentAuthorFilterId+
 //                        "\nlastFirstVisiblePosition: $lastFirstVisiblePosition, thread: ${Thread.currentThread().getId()}")
+
+                swipeContainer.setRefreshing(false)
+
                 addPostsToRecycleViewData(datalist!!)
                 if (lastFirstVisiblePosition > 0) {
                     (articlesList!!.getLayoutManager() as LinearLayoutManager).scrollToPositionWithOffset(lastFirstVisiblePosition, 0)
