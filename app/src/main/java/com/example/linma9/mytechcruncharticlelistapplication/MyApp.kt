@@ -45,7 +45,7 @@ class MyApp : Application() {
 
         Stetho.initializeWithDefaults(this)
 
-        Log.d("MyApp", "App test the : $locationManager instance")
+        Log.e("MyApp", "+++ +++++++++++++++++++++++ App test the : $locationManager instance")
         //TODO do some other cool stuff here
     }
 

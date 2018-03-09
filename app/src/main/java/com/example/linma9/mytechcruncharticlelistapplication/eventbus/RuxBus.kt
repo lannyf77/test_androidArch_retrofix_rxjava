@@ -11,6 +11,17 @@ import org.reactivestreams.Subscription
 object RxBus {
 
     private val publisher = PublishSubject.create<Any>()
+            .toSerialized()
+    /**
+     *
+     * PublishSubject.create<Any>() returns a == PublishSubject<T> extends Subject<T> ==
+     *
+     * the Subject<T>::toSerialized()
+     * Wraps this Subject and serializes the calls to the onSubscribe, onNext, onError and
+     * onComplete methods, making them thread-safe.
+     * <p>The method is thread-safe.
+     * @return the wrapped and serialized subject
+     */
 
     fun publish(event: Any) {
         publisher.onNext(event)

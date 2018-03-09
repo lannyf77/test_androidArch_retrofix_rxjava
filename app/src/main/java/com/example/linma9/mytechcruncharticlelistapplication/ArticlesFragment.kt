@@ -84,13 +84,15 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
         //use dagger to inject viewScope presentor
         if (MyApp.graph != null) {
             presentorComponent = MyApp.graph
-                    .addChildModle(PresentorModule(getContext()!!))
+                    .addChildModle(PresentorModule(getContext()!!.applicationContext))
 
             presentorComponent
                     .inject(this)
         }
 
         setUpPullRefres(view)
+
+        Log.d("MyApp", "+++ artivleFrgmt::onCreateView() this: $this"+"\nsavedInstanceState:"+savedInstanceState)
 
         return view
     }
@@ -168,8 +170,8 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
             }
 
             override fun onStop() {
-//                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId()+
-//                        "\nthis:"+this@ArticlesFragment+
+                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId()+
+                        "\nthis:"+this@ArticlesFragment);//+
 //                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment))
 //                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
 //                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
@@ -210,8 +212,8 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
             }
 
             override fun onDestroy() {
-//                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
-//                        "\nthis:"+this@ArticlesFragment)
+                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
+                        "\nthis:"+this@ArticlesFragment)
 //                GlobalEventBus.instance.unregister(this@ArticlesFragment)
 
                 if (mDisposable != null && mDisposable!!.isDisposed) {

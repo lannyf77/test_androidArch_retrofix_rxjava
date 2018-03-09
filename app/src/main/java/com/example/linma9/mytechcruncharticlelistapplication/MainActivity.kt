@@ -120,19 +120,50 @@ class MainActivity : AppCompatActivity() {
         appBarLayout = findViewById<AppBarLayout>(R.id.appbar)
         collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
         collapsingToolbar.title = getString(R.string.article_list)
-        appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            //Vertical offset == 0 indicates appBar is fully expanded.
-            if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange() && appBarExpanded) {
-                // Collapsed
 
-                updateToolbarScrim(false)
+        appBarLayout.addOnOffsetChangedListener(listener)
 
-                appBarExpanded = false
-                headerImg_index = randomHeaderImg()
-                findViewById<ImageView>(R.id.headerImg).setImageResource(headerImgs[headerImg_index])
+//        appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+//            //Vertical offset == 0 indicates appBar is fully expanded.
+//            if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange() && appBarExpanded) {
+//                // Collapsed
+//
+//                updateToolbarScrim(false)
+//
+//                appBarExpanded = false
+//                headerImg_index = randomHeaderImg()
+//                findViewById<ImageView>(R.id.headerImg).setImageResource(headerImgs[headerImg_index])
+//
+//                invalidateOptionsMenu()
+//            } else if (verticalOffset == 0 && !appBarExpanded) {
+//
+//                updateToolbarScrim(true)
+//
+//                // Expanded
+//                appBarExpanded = true
+//                invalidateOptionsMenu()
+//
+//            }
+//        }
 
-                invalidateOptionsMenu()
-            } else if (verticalOffset == 0 && !appBarExpanded) {
+        updateToolbarScrim(true)
+    }
+
+    var listener: AppBarLayout.OnOffsetChangedListener? = object : AppBarLayout.OnOffsetChangedListener {
+        override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                    //Vertical offset == 0 indicates appBar is fully expanded.
+        if (Math.abs(verticalOffset) >= appBarLayout!!.getTotalScrollRange() && appBarExpanded) {
+            // Collapsed
+
+            updateToolbarScrim(false)
+
+            appBarExpanded = false
+            headerImg_index = randomHeaderImg()
+            findViewById<ImageView>(R.id.headerImg).setImageResource(headerImgs[headerImg_index])
+
+            invalidateOptionsMenu()
+        } else if (verticalOffset == 0 && !appBarExpanded
+            ) {
 
                 updateToolbarScrim(true)
 
@@ -142,8 +173,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
-        updateToolbarScrim(true)
     }
 
     private fun updateToolbarScrim(expand: Boolean) {
@@ -184,6 +213,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.d("MyApp", "+++ mainActivity::onCreateView() this: $this"+"\nsavedInstanceState:"+savedInstanceState)
+
         initTheme()
         val toolbar = findViewById<Toolbar>(R.id.anim_toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -204,20 +236,20 @@ class MainActivity : AppCompatActivity() {
 
         theLifeCycleObserve = TheLifeCycleObserve(lifecycle, object : TheLifeCycleObserve.OnLifeCycleChange {
             override fun onCreate() {
-                //Log.i("TheLifeCycleObserve","+++ +++ mainActivity::TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
+                Log.i("TheLifeCycleObserve","+++ +++ mainActivity::TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
             }
 
             override fun onStop() {
-                //Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId())
+                Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId())
             }
 
             override fun onStar() {
-                //Log.i("TheLifeCycleObserve","+++ +++ mainActivity::TheLifeCycleObserve:onStar(), call initSession(), thread:"+Thread.currentThread().getId())
+                Log.i("TheLifeCycleObserve","+++ +++ mainActivity::TheLifeCycleObserve:onStar(), call initSession(), thread:"+Thread.currentThread().getId())
                 initSession()
             }
 
             override fun onDestroy() {
-                //Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::TheLifeCycleObserve:onDestroy(), call clearSession() && lifecycle.removeObserver, thread:"+Thread.currentThread().getId())
+                Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::TheLifeCycleObserve:onDestroy(), call clearSession() && lifecycle.removeObserver, thread:"+Thread.currentThread().getId())
                 try {
                     clearSession()
                 } catch(e: Exception) {
@@ -228,6 +260,17 @@ class MainActivity : AppCompatActivity() {
 
         })
         lifecycle.addObserver(theLifeCycleObserve as LifecycleObserver)
+    }
+
+    override fun onDestroy() {
+
+        appBarLayout?.removeOnOffsetChangedListener(listener)
+        listener = null
+
+        theLifeCycleObserve = null
+        val fab = findViewById<FloatingActionButton>(R.id.fab) as FloatingActionButton
+        fab.setOnClickListener {null}
+        super.onDestroy()
     }
 
     fun initTheme() {
