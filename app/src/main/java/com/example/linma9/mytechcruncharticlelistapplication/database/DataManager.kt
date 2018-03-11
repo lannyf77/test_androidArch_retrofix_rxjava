@@ -23,6 +23,7 @@ import java.util.ArrayList
 import javax.inject.Singleton
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 
 
@@ -80,7 +81,24 @@ class DataManager {
             mDisposable!!.dispose()
         }
 
-        mDisposable = RxBus.listen(DataEvent::class.java).subscribeWith(object : DisposableObserver<DataEvent>() {
+        mDisposable = registerRxBus();
+
+//        mDisposable = RxBus.listen(DataEvent::class.java).subscribeWith(object : DisposableObserver<DataEvent>() {
+//            override fun onComplete() {
+//                Log.e(TAG, "+++eee888 onComplete: All Done!")        }
+//
+//            override fun onNext(t: DataEvent) {
+//                Log.e(TAG, "+++eee888on Next: " + t)
+//                onDataReady(t)        }
+//
+//            override fun onError(e: Throwable) {
+//                Log.e(TAG, "+++eee888 onError: ")
+//            }
+//        })
+    }
+
+    fun registerRxBus() : Disposable {
+        return RxBus.listen(DataEvent::class.java).subscribeWith(object : DisposableObserver<DataEvent>() {
             override fun onComplete() {
                 Log.e(TAG, "+++eee888 onComplete: All Done!")        }
 

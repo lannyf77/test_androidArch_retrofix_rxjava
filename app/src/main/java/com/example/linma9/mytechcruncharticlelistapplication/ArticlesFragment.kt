@@ -39,8 +39,11 @@ import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.BundleAwareViewModelFactory
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import java.util.*
 import javax.inject.Inject
 
@@ -113,12 +116,9 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 
     }
 
-    var showLoading: Boolean = true;
+    var showLoading: Boolean = true
 
-    var infiniteScrollListener: InfiniteScrollListener? = null
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    private fun setupRecycleViewList(savedInstanceState: Bundle?) {
         articlesList!!.apply {
             setHasFixedSize(true)
             val linearLayout = LinearLayoutManager(context)
@@ -161,6 +161,56 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                 lastFirstVisiblePosition = savedInstanceState.getInt(CONTEXT_SAVED_SCROLL_POSITION, 0)
             }
         }
+    }
+
+    var infiniteScrollListener: InfiniteScrollListener? = null
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        setupRecycleViewList(savedInstanceState)
+
+//        articlesList!!.apply {
+//            setHasFixedSize(true)
+//            val linearLayout = LinearLayoutManager(context)
+//            layoutManager = linearLayout
+//
+//            clearOnScrollListeners()
+//
+//            infiniteScrollListener = presentorComponent.getInfiniteScrollListener()
+//
+//            infiniteScrollListener?.setLayoutManager(linearLayout)
+//
+//            // testing do custome set the handler instead of using the hardcoded in the PresentorModule
+//            infiniteScrollListener?.setHandler(
+//                    {
+//                        showLoading = true
+//                        presentor.pullDataFromRemoteServer()
+//                    }
+//            )
+//
+//            infiniteScrollListener?.setListner(
+//                    {
+//                        showLoading = it
+//                    }
+//            )
+//
+//// old non-injection way to instantiate the InfiniteScrollListener with
+//// a custom handling function passed in at this moment
+//
+////            infiniteScrollListener = InfiniteScrollListener(
+////                    {
+////                        presentor.pullDataFromRemoteServer()
+////                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
+////                        //Presentor.instance.pullDataFromRemoteServer()
+////                    },
+////                    linearLayout)
+//
+//            addOnScrollListener(infiniteScrollListener)
+//
+//            if (savedInstanceState != null) {
+//                lastFirstVisiblePosition = savedInstanceState.getInt(CONTEXT_SAVED_SCROLL_POSITION, 0)
+//            }
+//        }
 
 
         theLifeCycleObserve = TheLifeCycleObserve((lifecycle), object : TheLifeCycleObserve.OnLifeCycleChange {
@@ -196,16 +246,19 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                 if (mDisposable != null && mDisposable!!.isDisposed) {
                     mDisposable?.dispose()
                 }
-                mDisposable = RxBus.listen(DataEvent::class.java)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                    //println("Im a Message event ${it.action} ${it.message}")
-                    if (it.eventType == DataEvent.EVENT_TYPE_STRING) {
-                        if ("settings".equals(it.getStringMessage())) {
-                            resetPostFilter (null)
-                        }
-                    }
-                })
+
+                mDisposable = registerRxBus()
+
+//                mDisposable = RxBus.listen(DataEvent::class.java)
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe({
+//                    //println("Im a Message event ${it.action} ${it.message}")
+//                    if (it.eventType == DataEvent.EVENT_TYPE_STRING) {
+//                        if ("settings".equals(it.getStringMessage())) {
+//                            resetPostFilter (null)
+//                        }
+//                    }
+//                })
 
 
                 initStart(savedInstanceState)
@@ -222,6 +275,8 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                 mDisposable = null
 
                 lifecycle.removeObserver((theLifeCycleObserve as LifecycleObserver))
+
+                MyApp.watchRefOfThisContext(activity, this)
             }
 
         })
@@ -231,8 +286,63 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 
     }
 
+    private fun getDisposableObserver() : DisposableObserver<DataEvent> {
+        return object: DisposableObserver<DataEvent>() {
+            override fun onStart() {
+                Log.w("+++", "+++onStart()")
+            }
+            override fun onComplete() {
+                Log.w("+++", "+++onComplete()")
+            }
+
+            override fun onNext(it: DataEvent) {
+                Log.w("+++", "+++onSubscribe(), it:"+it)
+                if (it != null && it.eventType == DataEvent.EVENT_TYPE_STRING) {
+                    if ("settings".equals(it.getStringMessage())) {
+                        resetPostFilter (null)
+                    }
+                }
+            }
+
+            override fun onError(e: Throwable) {
+                Log.w("+++", "+++onError():"+e.toString())
+            }
+        }
+    }
+//    val listener = object: DisposableObserver<DataEvent>() {
+//        override fun onStart() {
+//            Log.w("+++", "+++onStart()")
+//        }
+//        override fun onComplete() {
+//            Log.w("+++", "+++onComplete()")
+//        }
+//
+//        override fun onNext(it: DataEvent) {
+//            Log.w("+++", "+++onSubscribe(), it:"+it)
+//            if (it != null && it.eventType == DataEvent.EVENT_TYPE_STRING) {
+//                if ("settings".equals(it.getStringMessage())) {
+//                    resetPostFilter (null)
+//                }
+//            }
+//        }
+//
+//        override fun onError(e: Throwable) {
+//            Log.w("+++", "+++onError():"+e.toString())
+//        }
+//
+//
+//    }
+
+    fun registerRxBus() : Disposable {
+        return RxBus.listen(DataEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(getDisposableObserver())
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+
+        MyApp.watchRefOfThisContext(activity, this)
     }
 
     fun initStart(savedInstanceState: Bundle?) {

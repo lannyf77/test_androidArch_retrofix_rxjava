@@ -114,6 +114,10 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.3.0'
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.4'
 
+    //LeakCanary - To find memory leaks in Alto
+    //https://github.com/square/leakcanary
+    implementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+
 }
 
 //configurations.all {

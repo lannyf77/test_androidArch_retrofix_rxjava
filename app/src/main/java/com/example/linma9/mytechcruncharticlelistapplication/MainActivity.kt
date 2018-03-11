@@ -256,6 +256,8 @@ class MainActivity : AppCompatActivity() {
                     //Log.i("TheLifeCycleObserve","+++ +++ --- mainActivity::theLifeCycleObserve:onDestroy(), !!! exception,  DataManager.instance"+DataManager.instance+", e:"+e.toString())
                 }
                 lifecycle.removeObserver(theLifeCycleObserve as LifecycleObserver)
+
+                MyApp.watchRefOfThisContext(this@MainActivity, this)
             }
 
         })
@@ -271,6 +273,8 @@ class MainActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener {null}
         super.onDestroy()
+
+        MyApp.watchRefOfThisContext(this, this)
     }
 
     fun initTheme() {
