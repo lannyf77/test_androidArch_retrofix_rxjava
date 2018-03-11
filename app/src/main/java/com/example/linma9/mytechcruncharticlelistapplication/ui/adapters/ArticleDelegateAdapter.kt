@@ -26,13 +26,24 @@ import android.graphics.Paint
 import android.graphics.drawable.StateListDrawable
 import android.graphics.drawable.ColorDrawable
 import android.view.View
+import java.lang.ref.WeakReference
 
 
 /**
  * Created by linma9 on 1/23/18.
  */
 
-class ArticleDelegateAdapter(val viewActions: onViewSelectedListener) : ViewTypeDelegateAdapter {
+class ArticleDelegateAdapter() : ViewTypeDelegateAdapter {
+
+    private lateinit var mViewSelectedListener : WeakReference<onViewSelectedListener>
+
+    constructor(viewActions : onViewSelectedListener) : this() {
+        mViewSelectedListener = WeakReference<onViewSelectedListener>(viewActions)
+    }
+
+    private fun getViewSelectedListener() : onViewSelectedListener? {
+        return mViewSelectedListener?.get()
+    }
 
     interface onViewSelectedListener {
         fun onItemSelected(url: String?)
@@ -77,17 +88,24 @@ class ArticleDelegateAdapter(val viewActions: onViewSelectedListener) : ViewType
             ///
 
             img_thumbnail.setOnClickListener(View.OnClickListener {
-                postDelayed(Runnable { viewActions.filterOn(item.authorId) }, 200)
+                postDelayed(Runnable {
+                    val action = getViewSelectedListener()
+                    action?.filterOn(item.authorId)
+                }, 200)
             })
 
             categories.setPaintFlags(categories.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
 
             categories.setOnClickListener(View.OnClickListener {
-                postDelayed(Runnable { viewActions.filterOnCategory(item.categories) }, 200)
+                postDelayed(Runnable {
+                    val action = getViewSelectedListener()
+                    action?.filterOnCategory(item.categories)
+                }, 200)
             })
 
             super.itemView.setOnClickListener {
-                viewActions.onItemSelected(item.url)
+                val action = getViewSelectedListener()
+                action?.onItemSelected(item.url)
             }
         }
     }
