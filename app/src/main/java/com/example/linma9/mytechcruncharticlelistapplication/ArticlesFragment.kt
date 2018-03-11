@@ -39,6 +39,7 @@ import com.example.linma9.mytechcruncharticlelistapplication.presentor.Presentor
 import com.example.linma9.mytechcruncharticlelistapplication.presentor.viewModel.TheLifeCycleObserve
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.internal.disposables.DisposableHelper
 import io.reactivex.observers.DisposableObserver
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.BundleAwareViewModelFactory
 import om.example.linma9.mywctcokhttprecycleviewapplication.viewModel.ParcelableViewModel
@@ -119,12 +120,12 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
     var showLoading: Boolean = true
 
     private fun setupRecycleViewList(savedInstanceState: Bundle?) {
-        articlesList!!.apply {
-            setHasFixedSize(true)
-            val linearLayout = LinearLayoutManager(context)
-            layoutManager = linearLayout
 
-            clearOnScrollListeners()
+        if (articlesList != null) {
+            articlesList?.setHasFixedSize(true)
+            val linearLayout = LinearLayoutManager(context)
+            articlesList?.layoutManager = linearLayout
+            articlesList?.clearOnScrollListeners()
 
             infiniteScrollListener = presentorComponent.getInfiniteScrollListener()
 
@@ -144,22 +145,12 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                     }
             )
 
-// old non-injection way to instantiate the InfiniteScrollListener with
-// a custom handling function passed in at this moment
-
-//            infiniteScrollListener = InfiniteScrollListener(
-//                    {
-//                        presentor.pullDataFromRemoteServer()
-//                        //MyApp.presentorComponenet.getPresenter().pullDataFromRemoteServer()
-//                        //Presentor.instance.pullDataFromRemoteServer()
-//                    },
-//                    linearLayout)
-
-            addOnScrollListener(infiniteScrollListener)
+            articlesList?.addOnScrollListener(infiniteScrollListener)
 
             if (savedInstanceState != null) {
                 lastFirstVisiblePosition = savedInstanceState.getInt(CONTEXT_SAVED_SCROLL_POSITION, 0)
             }
+
         }
     }
 
@@ -212,8 +203,83 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
 //            }
 //        }
 
+        theLifeCycleObserve = TheLifeCycleObserve((lifecycle), getOnLifeCycleChangeHandler(savedInstanceState))
 
-        theLifeCycleObserve = TheLifeCycleObserve((lifecycle), object : TheLifeCycleObserve.OnLifeCycleChange {
+//        theLifeCycleObserve = TheLifeCycleObserve((lifecycle), object : TheLifeCycleObserve.OnLifeCycleChange {
+//            override fun onCreate() {
+//                //Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
+//
+//            }
+//
+//            override fun onStop() {
+//                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onStop(), thread:"+Thread.currentThread().getId()+
+//                        "\nthis:"+this@ArticlesFragment);//+
+////                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment))
+////                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
+////                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
+////                }
+//                if (mDisposable != null && mDisposable!!.isDisposed) {
+//                    mDisposable!!.dispose()
+//                }
+//                mDisposable = null
+//            }
+//
+//            var mDisposable: Disposable? = null
+//            override fun onStar() {
+////                Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onStar(), call initStart(), thread:"+Thread.currentThread().getId()+
+////                        "\nthis:"+this@ArticlesFragment+
+////                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment)+
+////                        "\nisRegistered(ArticlesFragment): "+ GlobalEventBus.instance.isRegistered(this@ArticlesFragment))
+////                if (GlobalEventBus.instance.isRegistered(this@ArticlesFragment)) {
+////                    GlobalEventBus.instance.unregister(this@ArticlesFragment)
+////                }
+////                GlobalEventBus.instance.register(this@ArticlesFragment)
+//
+//                if (mDisposable != null && mDisposable!!.isDisposed) {
+//                    mDisposable?.dispose()
+//                }
+//
+//                mDisposable = registerRxBus()
+//
+////                mDisposable = RxBus.listen(DataEvent::class.java)
+////                        .observeOn(AndroidSchedulers.mainThread())
+////                        .subscribe({
+////                    //println("Im a Message event ${it.action} ${it.message}")
+////                    if (it.eventType == DataEvent.EVENT_TYPE_STRING) {
+////                        if ("settings".equals(it.getStringMessage())) {
+////                            resetPostFilter (null)
+////                        }
+////                    }
+////                })
+//
+//
+//                initStart(savedInstanceState)
+//            }
+//
+//            override fun onDestroy() {
+//                Log.d("TheLifeCycleObserve","+++ +++ --- TheLifeCycleObserve:onDestroy(), ifecycle.removeObserver, thread:"+Thread.currentThread().getId()+
+//                        "\nthis:"+this@ArticlesFragment)
+////                GlobalEventBus.instance.unregister(this@ArticlesFragment)
+//
+//                if (mDisposable != null && mDisposable!!.isDisposed) {
+//                    mDisposable!!.dispose()
+//                }
+//                mDisposable = null
+//
+//                lifecycle.removeObserver((theLifeCycleObserve as LifecycleObserver))
+//
+//                MyApp.watchRefOfThisContext(activity, this)
+//            }
+//
+//        })
+        lifecycle.addObserver((theLifeCycleObserve  as LifecycleObserver))
+
+        //initStart()
+
+    }
+
+    private fun getOnLifeCycleChangeHandler(savedInstanceState: Bundle?) : TheLifeCycleObserve.OnLifeCycleChange{
+        return object : TheLifeCycleObserve.OnLifeCycleChange {
             override fun onCreate() {
                 //Log.d("TheLifeCycleObserve","+++ +++ TheLifeCycleObserve:onCreate(), thread:"+Thread.currentThread().getId())
 
@@ -279,35 +345,55 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
                 MyApp.watchRefOfThisContext(activity, this)
             }
 
-        })
-        lifecycle.addObserver((theLifeCycleObserve  as LifecycleObserver))
+        }
+    }
 
-        //initStart()
+    class ArticlesFragmentDisposableObserver : DisposableObserver<DataEvent>() {
+        var mFrgmt: ArticlesFragment? = null
+
+        fun setFrgmt(frgmt: ArticlesFragment?) {
+            mFrgmt = frgmt
+        }
+
+        override fun onStart() {
+            Log.w("+++", "+++onStart()")
+        }
+
+        override fun onComplete() {
+            Log.w("+++", "+++onComplete()")
+        }
+
+        override fun onNext(it: DataEvent) {
+            Log.w("+++", "+++onSubscribe(), it:" + it)
+            if (mFrgmt != null && it != null && it.eventType == DataEvent.EVENT_TYPE_STRING) {
+                if ("settings".equals(it.getStringMessage())) {
+                    mFrgmt!!.resetPostFilter(null)
+                }
+            }
+        }
+
+        override fun onError(e: Throwable) {
+            Log.w("+++", "+++onError():" + e.toString())
+        }
 
     }
 
-    private fun getDisposableObserver() : DisposableObserver<DataEvent> {
-        return object: DisposableObserver<DataEvent>() {
-            override fun onStart() {
-                Log.w("+++", "+++onStart()")
-            }
-            override fun onComplete() {
-                Log.w("+++", "+++onComplete()")
-            }
-
-            override fun onNext(it: DataEvent) {
-                Log.w("+++", "+++onSubscribe(), it:"+it)
-                if (it != null && it.eventType == DataEvent.EVENT_TYPE_STRING) {
-                    if ("settings".equals(it.getStringMessage())) {
-                        resetPostFilter (null)
-                    }
-                }
-            }
-
-            override fun onError(e: Throwable) {
-                Log.w("+++", "+++onError():"+e.toString())
-            }
+    private var mDisposableObserver: ArticlesFragmentDisposableObserver? = null
+    private fun getDisposableObserver() : ArticlesFragmentDisposableObserver {
+        if (mDisposableObserver != null) {
+            /**
+             * io.reactivex.exceptions.ProtocolViolationException: It is not allowed to subscribe with a(n)
+             * com.example.linma9.mytechcruncharticlelistapplication.ArticlesFragment$getDisposableObserver$1 multiple times.
+             * Please create a fresh instance of com.example.linma9.mytechcruncharticlelistapplication.ArticlesFragment$getDisposableObserver$1
+             * and subscribe that to the target source instead.
+             */
+            disposeDisposableObserver()
         }
+        if (mDisposableObserver == null) {
+            mDisposableObserver = ArticlesFragmentDisposableObserver()
+            mDisposableObserver!!.setFrgmt(this)
+        }
+        return mDisposableObserver!!
     }
 //    val listener = object: DisposableObserver<DataEvent>() {
 //        override fun onStart() {
@@ -339,8 +425,18 @@ class ArticlesFragment : Fragment(), ArticleDelegateAdapter.onViewSelectedListen
             .subscribeWith(getDisposableObserver())
     }
 
+    private fun disposeDisposableObserver() {
+        if (mDisposableObserver != null) {
+            mDisposableObserver!!.setFrgmt(null)
+            mDisposableObserver = null
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
+
+        disposeDisposableObserver()
+        theLifeCycleObserve = null
+        articlesList = null
 
         MyApp.watchRefOfThisContext(activity, this)
     }
